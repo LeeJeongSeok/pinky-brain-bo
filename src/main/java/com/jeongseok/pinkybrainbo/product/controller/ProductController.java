@@ -1,0 +1,27 @@
+package com.jeongseok.pinkybrainbo.product.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@Controller
+public class ProductController {
+
+	@GetMapping("/products")
+	public String getProducts(Model model) {
+		return "/product/list";
+	}
+
+	@GetMapping("/products/new")
+	public String createProduct() {
+		return "/product/create";
+	}
+
+	@GetMapping("/products/{id}")
+	public String getProduct(@PathVariable("id") String id, Model model) {
+		return "/product/detail";
+	}
+
+
+}
