@@ -17,11 +17,4 @@ public class ProductController {
 	public String createProduct() {
 		return "/product/create";
 	}
-
-	@GetMapping("/products/{id}")
-	public String getProduct(@PathVariable("id") String id, Model model) {
-		return "/product/detail";
-	}
-
-
 }
