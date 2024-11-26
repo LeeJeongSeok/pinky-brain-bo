@@ -84,16 +84,23 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const formData = new FormData(form);
 
-    // Append images to formData
+    // 파일 입력 필드로 이미 추가된 이미지를 제거
     images.forEach((image) => {
-      formData.append("imageFiles", image.file);
+      if (!formData.getAll("imageFiles").includes(image.file)) {
+        formData.append("imageFiles", image.file);
+      }
     });
 
     fetch("/api/v1/products", {
       method: "POST",
       body: formData,
     })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("서버 응답 에러");
+      }
+      return response.json();
+    })
     .then((data) => alert("상품 등록 완료!"))
     .catch((error) => console.error("Error:", error));
   });
