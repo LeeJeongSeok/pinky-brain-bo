@@ -1,5 +1,6 @@
-package com.jeongseok.pinkybrainbo.file;
+package com.jeongseok.pinkybrainbo.product_image;
 
+import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,8 +20,9 @@ public class FileStore {
 		return fileDir + filename;
 	}
 
-	public List<UploadFile> storeFiles(List<MultipartFile> files) throws IOException {
-		List<UploadFile> storeFileResult = new ArrayList<>();
+	// 여기서 멀티파트로 받아야하는건 확실하니, 엔티티로 바로 저장하지말고 dto로 저장하자
+	public List<ProductImageDto> storeFiles(List<MultipartFile> files) throws IOException {
+		List<ProductImageDto> storeFileResult = new ArrayList<>();
 		for (MultipartFile file : files) {
 			if (!file.isEmpty()) {
 				storeFileResult.add(storeFile(file));
@@ -29,7 +31,7 @@ public class FileStore {
 		return storeFileResult;
 	}
 
-	public UploadFile storeFile(MultipartFile file) throws IOException {
+	public ProductImageDto storeFile(MultipartFile file) throws IOException {
 
 		if (file.isEmpty()) {
 			return null;
@@ -39,7 +41,7 @@ public class FileStore {
 		String storeFileName = createStoreFileName(originalFilename);
 		file.transferTo(new File(getFullPath(storeFileName)));
 
-		return new UploadFile(originalFilename, storeFileName);
+		return new ProductImageDto(originalFilename, storeFileName);
 	}
 
 	private String createStoreFileName(String originalFilename) {
