@@ -16,3 +16,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
+
+  # private yml 파일 포함시켜서 읽어오기
+  profiles:
+    include: private
