@@ -23,14 +23,11 @@ public class ProductService {
 	public void createProduct(CreateProductDto createProductDto) throws IOException {
 
 		List<ProductImageDto> productImageDtos = fileStore.storeFiles(createProductDto.getImageFiles());
-
 		// Product 생성
 		Product product = ProductMapper.toProduct(createProductDto);
-
 		// ProductImage 변환 및 연관 관계 설정
 		List<ProductImage> productImages = ProductImageMapper.toProductImages(productImageDtos);
 		product.addProductImage(productImages); // 연관 관계 설정
-
 
 		productRepository.save(product);
 	}
