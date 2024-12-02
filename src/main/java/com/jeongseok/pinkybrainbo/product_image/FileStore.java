@@ -1,20 +1,31 @@
 package com.jeongseok.pinkybrainbo.product_image;
 
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.jeongseok.pinkybrainbo.common.S3Config;
 import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
+@RequiredArgsConstructor
 public class FileStore {
+
+	private final S3Config s3Config;
 
 	@Value("${file.dir}")
 	private String fileDir;
+
+	@Value("${spring.cloud.aws.s3.bucket}")
+	private String bucket;
+
 
 	public String getFullPath(String filename) {
 		return fileDir + filename;
@@ -39,9 +50,21 @@ public class FileStore {
 
 		String originalFilename = file.getOriginalFilename();
 		String storeFileName = createStoreFileName(originalFilename);
-		file.transferTo(new File(getFullPath(storeFileName)));
 
-		return new ProductImageDto(originalFilename, storeFileName);
+		// 로컬에 파일 저장
+		File localFile = new File(getFullPath(storeFileName));
+		file.transferTo(localFile);
+
+		// S3에 파일 업로드
+		String s3UploadFileName = putS3(storeFileName, localFile);
+
+		return new ProductImageDto(originalFilename, s3UploadFileName);
+
+	}
+
+	private String putS3(String storeFileName, File localFile) {
+		s3Config.amazonS3Client().putObject(new PutObjectRequest(bucket, storeFileName, localFile).withCannedAcl(CannedAccessControlList.PublicRead));
+		return s3Config.amazonS3Client().getUrl(bucket, storeFileName).toString();
 	}
 
 	private String createStoreFileName(String originalFilename) {
