@@ -26,12 +26,10 @@ public class FileStore {
 	@Value("${spring.cloud.aws.s3.bucket}")
 	private String bucket;
 
-
 	public String getFullPath(String filename) {
 		return fileDir + filename;
 	}
 
-	// 여기서 멀티파트로 받아야하는건 확실하니, 엔티티로 바로 저장하지말고 dto로 저장하자
 	public List<ProductImageDto> storeFiles(List<MultipartFile> files) throws IOException {
 		List<ProductImageDto> storeFileResult = new ArrayList<>();
 		for (MultipartFile file : files) {
