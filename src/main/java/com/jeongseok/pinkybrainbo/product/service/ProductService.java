@@ -20,7 +20,8 @@ public class ProductService {
 	private final ProductRepository productRepository;
 	private final FileStore fileStore;
 
-	public void createProduct(CreateProductDto createProductDto) throws IOException {
+	// TODO: Response Entity에 맞춰서 값을 리턴할 수 있도록 고려해야함
+	public long createProduct(CreateProductDto createProductDto) throws IOException {
 
 		List<ProductImageDto> productImageDtos = fileStore.storeFiles(createProductDto.getImageFiles());
 		// Product 생성
@@ -29,6 +30,8 @@ public class ProductService {
 		List<ProductImage> productImages = ProductImageMapper.toProductImages(productImageDtos);
 		product.addProductImage(productImages); // 연관 관계 설정
 
-		productRepository.save(product);
+		Product savedProduct = productRepository.save(product);
+
+		return savedProduct.getId();
 	}
 }
