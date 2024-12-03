@@ -1,15 +1,14 @@
 package com.jeongseok.pinkybrainbo.product.controller;
 
+import com.jeongseok.pinkybrainbo.common.ApiResponse;
 import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.service.ProductService;
 import jakarta.validation.Valid;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,15 +25,18 @@ public class ProductRestController {
 
 	@PostMapping(value = "/products")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Map<String, Object>> createProduct(@Valid @ModelAttribute CreateProductDto createProductDto) throws IOException {
+	public ApiResponse<String> createProduct(@Valid @ModelAttribute CreateProductDto createProductDto) throws IOException {
 
 		long productId = productService.createProduct(createProductDto);
 
-		Map<String, Object> response = new HashMap<>();
-		response.put("message", "상품 등록 성공");
-		response.put("productId", productId);
+		return ApiResponse.ok("ok");
 
-		return ResponseEntity.ok(response);
+	}
 
+	@GetMapping(value = "/products")
+	@ResponseStatus(HttpStatus.OK)
+	public void getProducts() {
+
+		productService.getProducts();
 	}
 }
