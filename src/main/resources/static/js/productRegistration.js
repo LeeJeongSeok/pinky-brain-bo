@@ -101,7 +101,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       return response.json();
     })
-    .then((data) => alert("상품 등록 완료!"))
+    .then((data) => {
+      alert("상품 등록 완료!");
+      window.location.href = "/products"; // 특정 페이지로 이동 및 새로고침
+    })
     .catch((error) => console.error("Error:", error));
   });
 });
