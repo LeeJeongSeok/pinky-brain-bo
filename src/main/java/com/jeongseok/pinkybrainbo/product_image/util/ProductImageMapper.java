@@ -32,4 +32,14 @@ public class ProductImageMapper {
 			.imageOrder(productImage.getImageOrder())
 			.build();
 	}
+
+	public static List<ProductImageDto.Response> toDto(List<ProductImage> productImages) {
+		List<ProductImageDto.Response> productImageDtos = new ArrayList<>();
+
+		for (ProductImage productImage : productImages) {
+			productImageDtos.add(toDto(productImage));
+		}
+
+		return productImageDtos;
+	}
 }
