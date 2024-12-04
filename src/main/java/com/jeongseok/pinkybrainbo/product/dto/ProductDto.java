@@ -45,10 +45,12 @@ public class ProductDto {
 	@Builder
 	public static class Response {
 
+		private long id;
 		private String name;
 		private String category;
 		private String description;
-		private List<ProductImageDto> imageFiles;
+		private List<ProductImageDto.Response> imageFiles;
+
 	}
 
 }
