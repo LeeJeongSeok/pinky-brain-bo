@@ -4,7 +4,6 @@ import com.jeongseok.pinkybrainbo.product.domain.Product;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 
 public class ProductMapper {
-	
 
 	public static Product toProduct(ProductDto.Request createProductRequest) {
 		return Product.builder()

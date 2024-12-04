@@ -7,21 +7,29 @@ import java.util.List;
 
 public class ProductImageMapper {
 
-	public static List<ProductImage> toProductImages(List<ProductImageDto> productImageDtos) {
+	public static List<ProductImage> toProductImages(List<ProductImageDto.Request> productImageDtos) {
 		List<ProductImage> productImages = new ArrayList<>();
 		int order = 1; // 상품별로 순서를 초기화
 
-		for (ProductImageDto productImageDto : productImageDtos) {
+		for (ProductImageDto.Request productImageDto : productImageDtos) {
 			productImages.add(toProductImage(productImageDto, order++));
 		}
 
 		return productImages;
 	}
 
-	private static ProductImage toProductImage(ProductImageDto productImageDto, int order) {
+	private static ProductImage toProductImage(ProductImageDto.Request productImageDto, int order) {
 		return ProductImage.builder()
 			.imageUrl(productImageDto.getStoreFileName())
 			.imageOrder(order)
+			.build();
+	}
+
+	public static ProductImageDto.Response toDto(ProductImage productImage) {
+		return ProductImageDto.Response.builder()
+			.id(productImage.getId())
+			.imageUrl(productImage.getImageUrl())
+			.imageOrder(productImage.getImageOrder())
 			.build();
 	}
 }

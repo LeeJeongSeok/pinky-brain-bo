@@ -30,8 +30,8 @@ public class FileStore {
 		return fileDir + filename;
 	}
 
-	public List<ProductImageDto> storeFiles(List<MultipartFile> files) throws IOException {
-		List<ProductImageDto> storeFileResult = new ArrayList<>();
+	public List<ProductImageDto.Request> storeFiles(List<MultipartFile> files) throws IOException {
+		List<ProductImageDto.Request> storeFileResult = new ArrayList<>();
 		for (MultipartFile file : files) {
 			if (!file.isEmpty()) {
 				storeFileResult.add(storeFile(file));
@@ -40,7 +40,7 @@ public class FileStore {
 		return storeFileResult;
 	}
 
-	public ProductImageDto storeFile(MultipartFile file) throws IOException {
+	public ProductImageDto.Request storeFile(MultipartFile file) throws IOException {
 
 		if (file.isEmpty()) {
 			return null;
@@ -56,7 +56,7 @@ public class FileStore {
 		// S3에 파일 업로드
 		String s3UploadFileName = putS3(storeFileName, localFile);
 
-		return new ProductImageDto(originalFilename, s3UploadFileName);
+		return new ProductImageDto.Request(originalFilename, s3UploadFileName);
 
 	}
 

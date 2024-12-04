@@ -1,7 +1,7 @@
 package com.jeongseok.pinkybrainbo.product.controller;
 
 import com.jeongseok.pinkybrainbo.common.ApiResponse;
-import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.service.ProductService;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -25,11 +25,11 @@ public class ProductRestController {
 
 	@PostMapping(value = "/products")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<String> createProduct(@Valid @ModelAttribute CreateProductDto createProductDto) throws IOException {
+	public ApiResponse<ProductDto.Response> createProduct(@Valid @ModelAttribute ProductDto.Request createProductRequest) throws IOException {
 
-		long productId = productService.createProduct(createProductDto);
+		ProductDto.Response productDto = productService.createProduct(createProductRequest);
 
-		return ApiResponse.ok("ok");
+		return ApiResponse.created(productDto);
 
 	}
 
