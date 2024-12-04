@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class ProductImage extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "product_image_id")
+	@Column(name = "id")
 	private long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
