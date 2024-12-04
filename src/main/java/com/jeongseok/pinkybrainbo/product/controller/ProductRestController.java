@@ -5,6 +5,7 @@ import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.service.ProductService;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,6 @@ public class ProductRestController {
 	private final ProductService productService;
 
 	@PostMapping(value = "/products")
-	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<ProductDto.Response> createProduct(@Valid @ModelAttribute ProductDto.Request createProductRequest) throws IOException {
 
 		ProductDto.Response productDto = productService.createProduct(createProductRequest);
@@ -35,8 +35,7 @@ public class ProductRestController {
 
 	@GetMapping(value = "/products")
 	@ResponseStatus(HttpStatus.OK)
-	public void getProducts() {
-
-		productService.getProducts();
+	public ApiResponse<List<ProductDto.Response>> getProducts() {
+		return ApiResponse.ok(productService.getProducts());
 	}
 }

@@ -10,6 +10,7 @@ import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto;
 import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,10 @@ public class ProductService {
 
 	}
 
-	public void getProducts() {
-
+	public List<ProductDto.Response> getProducts() {
+		return productRepository.findAll()
+			.stream()
+			.map(ProductMapper::toDto)
+			.collect(Collectors.toList());
 	}
 }
