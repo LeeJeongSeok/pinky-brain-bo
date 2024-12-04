@@ -31,6 +31,9 @@ public class Product extends BaseEntity {
 	@Column(name = "name")
 	private String name;
 
+	@Column(name = "category")
+	private String category;
+
 	@Column(name = "description")
 	private String description;
 
@@ -38,9 +41,10 @@ public class Product extends BaseEntity {
 	private List<ProductImage> productImages = new ArrayList<>();
 
 	@Builder
-	public Product(long id, String name, String description, List<ProductImage> productImages) {
+	public Product(long id, String name, String category, String description, List<ProductImage> productImages) {
 		this.id = id;
 		this.name = name;
+		this.category = category;
 		this.description = description;
 		this.productImages = productImages;
 	}
