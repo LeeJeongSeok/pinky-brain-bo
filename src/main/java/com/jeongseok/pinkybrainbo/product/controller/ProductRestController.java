@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,5 +48,13 @@ public class ProductRestController {
 
 		// okWithPaging 메서드 사용
 		return ApiResponse.okWithPaging(productPage.getContent(), productPage);
+	}
+
+	@GetMapping("/products/{id}")
+	public ApiResponse<ProductDto.Response> getProduct(@PathVariable("id") long id) {
+
+		ProductDto.Response productResponse = productService.getProduct(id);
+
+		return ApiResponse.ok(productResponse);
 	}
 }

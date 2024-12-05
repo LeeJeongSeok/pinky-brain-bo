@@ -17,4 +17,9 @@ public class ProductController {
 	public String createProduct() {
 		return "/product/create";
 	}
+
+	@GetMapping("/product/{id}")
+	public String getProduct(@PathVariable("id") String id) {
+		return "/product/detail";
+	}
 }

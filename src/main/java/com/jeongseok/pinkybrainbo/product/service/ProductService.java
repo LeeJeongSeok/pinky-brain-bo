@@ -12,6 +12,7 @@ import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -75,5 +76,13 @@ public class ProductService {
 
 		// 페이지네이션 결과를 PageImpl 객체로 반환
 		return new PageImpl<>(productPages, PageRequest.of(currentPage, pageSize), products.size());
+	}
+
+	public ProductDto.Response getProduct(long id) {
+
+		Product product = productRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없쪄요"));
+
+		return ProductMapper.toDto(product);
 	}
 }
