@@ -2,6 +2,7 @@ package com.jeongseok.pinkybrainbo.product.service;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.ProductDto.Response;
 import com.jeongseok.pinkybrainbo.product.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.product.util.ProductMapper;
 import com.jeongseok.pinkybrainbo.product_image.FileStore;
@@ -9,9 +10,14 @@ import com.jeongseok.pinkybrainbo.product_image.domain.ProductImage;
 import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto;
 import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,5 +48,32 @@ public class ProductService {
 			.stream()
 			.map(ProductMapper::toDto)
 			.collect(Collectors.toList());
+	}
+
+	public Page<ProductDto.Response> getPaginatedProducts(Pageable pageable, String searchKeyword) {
+
+		// 페이지네이션 기본 정보 설정
+		int pageSize = pageable.getPageSize(); // 한 페이지당 항목 수
+		int currentPage = pageable.getPageNumber(); // 현재 페이지 번호 (0부터 시작)
+		int startItem = currentPage * pageSize; // 현재 페이지의 시작 항목 인덱스
+
+		List<ProductDto.Response> products = productRepository.findProductBySearchKeyword(searchKeyword)
+			.stream()
+			.map(ProductMapper::toDto)
+			.collect(Collectors.toList());
+
+		List<ProductDto.Response> productPages;
+
+		// 현재 페이지의 시작 인덱스가 전체 리스트 크기보다 큰 경우 빈 리스트 반환
+		if (products.size() < startItem) {
+			productPages = Collections.emptyList();
+		} else {
+			// 현재 페이지에 해당하는 서브리스트 생성
+			int toIndex = Math.min(startItem + pageSize, products.size());
+			productPages = products.subList(startItem, toIndex);
+		}
+
+		// 페이지네이션 결과를 PageImpl 객체로 반환
+		return new PageImpl<>(productPages, PageRequest.of(currentPage, pageSize), products.size());
 	}
 }

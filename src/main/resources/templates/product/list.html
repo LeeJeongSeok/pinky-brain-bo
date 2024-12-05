@@ -69,24 +69,7 @@
 					</tr>
 					</thead>
 					<tbody id="productTable" class="bg-white divide-y divide-gray-200">
-					<tr th:each="product : ${products}">
-						<td class="px-6 py-4 whitespace-nowrap">
-							<img th:src="${product.image}" alt="상품 이미지" class="h-12 w-12 object-cover rounded" />
-						</td>
-						<td class="px-6 py-4 whitespace-nowrap" th:text="${product.name}"></td>
-						<td class="px-6 py-4 whitespace-nowrap" th:text="${product.category}"></td>
-						<td class="px-6 py-4 whitespace-nowrap" th:text="${product.date}"></td>
-						<td class="px-6 py-4 whitespace-nowrap">
-							<div class="flex space-x-2">
-								<button class="p-1 text-blue-600 hover:bg-blue-50 rounded">
-									<i class="icon-edit h-4 w-4"></i>
-								</button>
-								<button class="p-1 text-red-600 hover:bg-red-50 rounded">
-									<i class="icon-trash h-4 w-4"></i>
-								</button>
-							</div>
-						</td>
-					</tr>
+					
 					</tbody>
 				</table>
 			</div>
@@ -94,15 +77,12 @@
 			<div class="mt-6 flex items-center justify-between">
 				<div id="totalCount" class="text-sm text-gray-500">총 ${products.size()}개의 상품</div>
 				<div class="flex items-center space-x-2">
-					<button id="prevPage" class="p-2 border rounded hover:bg-gray-50" disabled>
-						<i class="icon-chevron-left h-4 w-4"></i>
-					</button>
-					<span id="currentPage" class="px-4 py-2 border rounded bg-blue-500 text-white">1</span>
-					<button id="nextPage" class="p-2 border rounded hover:bg-gray-50">
-						<i class="icon-chevron-right h-4 w-4"></i>
-					</button>
+					<!-- 새로운 페이지네이션 버튼 컨테이너 -->
+					<div id="paginationContainer" class="flex justify-center mt-4"></div>
 				</div>
 			</div>
+			
+			
 		</div>
 	</main>
 </div>
