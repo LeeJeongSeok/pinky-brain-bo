@@ -14,13 +14,13 @@ public class ProductMapper {
 			.build();
 	}
 
-	public static ProductDto.Response toDto(Product savedProduct) {
+	public static ProductDto.Response toDto(Product product) {
 		return ProductDto.Response.builder()
-			.id(savedProduct.getId())
-			.name(savedProduct.getName())
-			.category(savedProduct.getCategory())
-			.description(savedProduct.getDescription())
-			.imageFiles(ProductImageMapper.toDto(savedProduct.getProductImages()))
+			.id(product.getId())
+			.name(product.getName())
+			.category(product.getCategory())
+			.description(product.getDescription())
+			.imageFiles(ProductImageMapper.toDto(product.getProductImages()))
 			.build();
 	}
 }
