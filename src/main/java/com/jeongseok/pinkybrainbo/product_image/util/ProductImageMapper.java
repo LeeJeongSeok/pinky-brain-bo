@@ -25,7 +25,7 @@ public class ProductImageMapper {
 			.build();
 	}
 
-	public static ProductImageDto.Response toDto(ProductImage productImage) {
+	private static ProductImageDto.Response toDto(ProductImage productImage) {
 		return ProductImageDto.Response.builder()
 			.id(productImage.getId())
 			.imageUrl(productImage.getImageUrl())
