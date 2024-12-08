@@ -2,17 +2,17 @@ package com.jeongseok.pinkybrainbo.product.service;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
-import com.jeongseok.pinkybrainbo.product.dto.ProductDto.Response;
 import com.jeongseok.pinkybrainbo.product.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.product.util.ProductMapper;
 import com.jeongseok.pinkybrainbo.product_image.FileStore;
 import com.jeongseok.pinkybrainbo.product_image.domain.ProductImage;
 import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto;
+import com.jeongseok.pinkybrainbo.product_image.repository.ProductImageRepository;
 import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
+import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
 	private final ProductRepository productRepository;
+	private final ProductImageRepository productImageRepository;
 	private final FileStore fileStore;
 
 	// TODO: Response Entity에 맞춰서 값을 리턴할 수 있도록 고려해야함
@@ -36,7 +37,10 @@ public class ProductService {
 		Product product = ProductMapper.toProduct(createProductRequest);
 		// ProductImage 변환 및 연관 관계 설정
 		List<ProductImage> productImages = ProductImageMapper.toProductImages(productImageDtos);
-		product.addProductImage(productImages); // 연관 관계 설정
+
+		for (ProductImage productImage : productImages) {
+			productImage.addProduct(product);
+		}
 
 		Product savedProduct = productRepository.save(product);
 
@@ -84,5 +88,33 @@ public class ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없쪄요"));
 
 		return ProductMapper.toDto(product);
+	}
+
+	@Transactional
+	public ProductDto.Response updateProduct(long id, ProductDto.Request updateProductRequest) throws IOException {
+
+		List<ProductImageDto.Request> updateProductImageDtos = fileStore.storeFiles(updateProductRequest.getImageFiles());
+		List<ProductImage> updateProductImages = ProductImageMapper.toProductImages(updateProductImageDtos);
+
+		Product savedProduct = productRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없쪄요"));
+
+		List<ProductImage> savedProductImages = productImageRepository.findByProduct_Id(id)
+			.orElseThrow(() -> new IllegalArgumentException("상품 이미지 데이터가 없쪄요!"));
+
+		// 기존 이미지 삭제 (데이터베이스에서 삭제)
+		productImageRepository.deleteAll(savedProductImages);
+		// 연관 관계에서 제거
+		savedProduct.getProductImages().clear();
+
+		// 새로운 이미지 추가
+		for (ProductImage image : updateProductImages) {
+			image.addProduct(savedProduct); // 연관 관계 설정
+		}
+
+		savedProduct.update(ProductMapper.toProduct(updateProductRequest));
+
+		return ProductMapper.toDto(savedProduct);
+
 	}
 }
