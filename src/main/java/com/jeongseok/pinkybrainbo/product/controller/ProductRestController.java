@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,5 +57,13 @@ public class ProductRestController {
 		ProductDto.Response productResponse = productService.getProduct(id);
 
 		return ApiResponse.ok(productResponse);
+	}
+
+	@PatchMapping("/products/{id}")
+	public ApiResponse<ProductDto.Response> updateProduct(@PathVariable("id") long id, @ModelAttribute ProductDto.Request updateProductRequest) throws IOException {
+
+		ProductDto.Response updateProductDto = productService.updateProduct(id, updateProductRequest);
+
+		return ApiResponse.ok(updateProductDto);
 	}
 }
