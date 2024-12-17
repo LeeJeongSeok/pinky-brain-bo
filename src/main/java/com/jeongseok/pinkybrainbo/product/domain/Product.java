@@ -37,7 +37,7 @@ public class Product extends BaseEntity {
 	@Column(name = "description")
 	private String description;
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "product")
 	private List<ProductImage> productImages = new ArrayList<>();
 
 	@Builder
@@ -49,19 +49,12 @@ public class Product extends BaseEntity {
 		this.productImages = productImages;
 	}
 
-	// 상품 업데이트 메소드 필요
+	// 상품 업데이트 메소드
 	public void update(Product product) {
 		this.name = product.getName();
+		this.category = product.getCategory();
 		this.description = product.getDescription();
-		this.productImages = product.getProductImages();
 	}
 
-	public void addProductImage(List<ProductImage> productImages) {
-		for (ProductImage productImage : productImages) {
-			productImage.setProduct(this); // 연관 관계 주인 설정
-		}
-
-		this.productImages = productImages;
-	}
 
 }
