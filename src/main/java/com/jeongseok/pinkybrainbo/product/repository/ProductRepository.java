@@ -1,6 +1,7 @@
 package com.jeongseok.pinkybrainbo.product.repository;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
+import com.jeongseok.pinkybrainbo.product_image.domain.ProductImage;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
