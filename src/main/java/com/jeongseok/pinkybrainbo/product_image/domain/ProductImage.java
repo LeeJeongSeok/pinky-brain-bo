@@ -44,8 +44,17 @@ public class ProductImage extends BaseEntity {
 		this.imageOrder = imageOrder;
 	}
 
-	public void setProduct(Product product) {
+	// 연관관계 편의 메소드
+	public void addProduct(Product product) {
 		this.product = product;
+	}
+
+
+	// 상품 사진 업데이트 메소드
+	public void updateProductImages(ProductImage productImage) {
+		this.product = productImage.getProduct();
+		this.imageUrl = productImage.getImageUrl();
+		this.imageOrder = productImage.getImageOrder();
 	}
 
 }
