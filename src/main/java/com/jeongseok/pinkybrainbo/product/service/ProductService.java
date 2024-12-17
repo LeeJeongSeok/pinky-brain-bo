@@ -48,12 +48,6 @@ public class ProductService {
 
 	}
 
-	public List<ProductDto.Response> getProducts() {
-		return productRepository.findAll()
-			.stream()
-			.map(ProductMapper::toDto)
-			.collect(Collectors.toList());
-	}
 
 	public Page<ProductDto.Response> getPaginatedProducts(Pageable pageable, String searchKeyword) {
 
@@ -93,28 +87,55 @@ public class ProductService {
 	@Transactional
 	public ProductDto.Response updateProduct(long id, ProductDto.Request updateProductRequest) throws IOException {
 
+		// 새로운 이미지 파일 저장
 		List<ProductImageDto.Request> updateProductImageDtos = fileStore.storeFiles(updateProductRequest.getImageFiles());
-		List<ProductImage> updateProductImages = ProductImageMapper.toProductImages(updateProductImageDtos);
+		List<ProductImage> newImages = ProductImageMapper.toProductImages(updateProductImageDtos);
 
+		// 기존 상품 및 이미지 조회
 		Product savedProduct = productRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없쪄요"));
+			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없습니다."));
+		List<ProductImage> existingImages = productImageRepository.findByProduct_Id(id)
+			.orElseThrow(() -> new IllegalArgumentException("상품 이미지 데이터가 없습니다."));
 
-		List<ProductImage> savedProductImages = productImageRepository.findByProduct_Id(id)
-			.orElseThrow(() -> new IllegalArgumentException("상품 이미지 데이터가 없쪄요!"));
+		// 새로운 이미지 처리
+		List<Long> newImageIds = newImages.stream()
+			.map(ProductImage::getId)
+			.toList();
 
-		// 기존 이미지 삭제 (데이터베이스에서 삭제)
-		productImageRepository.deleteAll(savedProductImages);
-		// 연관 관계에서 제거
-		savedProduct.getProductImages().clear();
+		// 삭제할 이미지 추출
+		List<ProductImage> imagesToRemove = existingImages.stream()
+			.filter(existingImage -> !newImageIds.contains(existingImage.getId()))
+			.toList();
 
-		// 새로운 이미지 추가
-		for (ProductImage image : updateProductImages) {
-			image.addProduct(savedProduct); // 연관 관계 설정
+		// 기존 이미지 삭제
+		for (ProductImage image : imagesToRemove) {
+			productImageRepository.delete(image);
+			savedProduct.getProductImages().remove(image);
 		}
 
+		// 새로운 이미지 추가 및 기존 이미지 업데이트
+		for (ProductImage newImage : newImages) {
+			boolean isExisting = existingImages.stream()
+				.anyMatch(existingImage -> existingImage.getId() == newImage.getId());
+
+			if (isExisting) {
+				// 기존 이미지 업데이트
+				existingImages.stream()
+					.filter(existingImage -> existingImage.getId() == newImage.getId())
+					.forEach(existingImage -> {
+						existingImage.updateProductImages(newImage);
+					});
+			} else {
+				// 새로운 이미지 추가
+				newImage.addProduct(savedProduct); // 연관 관계 설정
+			}
+		}
+
+		// 상품 정보 업데이트
 		savedProduct.update(ProductMapper.toProduct(updateProductRequest));
 
+		// 변경 감지로 인해 자동 저장
 		return ProductMapper.toDto(savedProduct);
-
 	}
+
 }
