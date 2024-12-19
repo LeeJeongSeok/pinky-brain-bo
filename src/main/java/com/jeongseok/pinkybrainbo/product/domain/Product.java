@@ -40,6 +40,7 @@ public class Product extends BaseEntity {
 	@OneToMany(mappedBy = "product")
 	private List<ProductImage> productImages = new ArrayList<>();
 
+
 	@Builder
 	public Product(long id, String name, String category, String description, List<ProductImage> productImages) {
 		this.id = id;
@@ -48,13 +49,5 @@ public class Product extends BaseEntity {
 		this.description = description;
 		this.productImages = productImages;
 	}
-
-	// 상품 업데이트 메소드
-	public void update(Product product) {
-		this.name = product.getName();
-		this.category = product.getCategory();
-		this.description = product.getDescription();
-	}
-
 
 }

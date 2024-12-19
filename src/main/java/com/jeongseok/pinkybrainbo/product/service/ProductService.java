@@ -35,11 +35,11 @@ public class ProductService {
 		List<ProductImageDto.Request> productImageDtos = fileStore.storeFiles(createProductRequest.getImageFiles());
 		// Product 생성
 		Product product = ProductMapper.toProduct(createProductRequest);
-		// ProductImage 변환 및 연관 관계 설정
+		// ProductImageDto -> ProductImage 변환
 		List<ProductImage> productImages = ProductImageMapper.toProductImages(productImageDtos);
 
 		for (ProductImage productImage : productImages) {
-			productImage.addProduct(product);
+			product.addProductImage(productImage);
 		}
 
 		Product savedProduct = productRepository.save(product);
@@ -97,45 +97,7 @@ public class ProductService {
 		List<ProductImage> existingImages = productImageRepository.findByProduct_Id(id)
 			.orElseThrow(() -> new IllegalArgumentException("상품 이미지 데이터가 없습니다."));
 
-		// 새로운 이미지 처리
-		List<Long> newImageIds = newImages.stream()
-			.map(ProductImage::getId)
-			.toList();
-
-		// 삭제할 이미지 추출
-		List<ProductImage> imagesToRemove = existingImages.stream()
-			.filter(existingImage -> !newImageIds.contains(existingImage.getId()))
-			.toList();
-
-		// 기존 이미지 삭제
-		for (ProductImage image : imagesToRemove) {
-			productImageRepository.delete(image);
-			savedProduct.getProductImages().remove(image);
-		}
-
-		// 새로운 이미지 추가 및 기존 이미지 업데이트
-		for (ProductImage newImage : newImages) {
-			boolean isExisting = existingImages.stream()
-				.anyMatch(existingImage -> existingImage.getId() == newImage.getId());
-
-			if (isExisting) {
-				// 기존 이미지 업데이트
-				existingImages.stream()
-					.filter(existingImage -> existingImage.getId() == newImage.getId())
-					.forEach(existingImage -> {
-						existingImage.updateProductImages(newImage);
-					});
-			} else {
-				// 새로운 이미지 추가
-				newImage.addProduct(savedProduct); // 연관 관계 설정
-			}
-		}
-
-		// 상품 정보 업데이트
-		savedProduct.update(ProductMapper.toProduct(updateProductRequest));
-
-		// 변경 감지로 인해 자동 저장
-		return ProductMapper.toDto(savedProduct);
+		return null;
 	}
 
 }
