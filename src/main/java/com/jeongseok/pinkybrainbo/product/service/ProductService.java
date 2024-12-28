@@ -3,6 +3,7 @@ package com.jeongseok.pinkybrainbo.product.service;
 import com.jeongseok.pinkybrainbo.product.domain.Product;
 import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.product.util.ProductMapper;
@@ -32,7 +33,7 @@ public class ProductService {
 	private final FileStore fileStore;
 
 	// TODO: Response Entity에 맞춰서 값을 리턴할 수 있도록 고려해야함
-	public ProductDto.Response createProduct(CreateProductDto createProductRequest) throws IOException {
+	public ProductDetailDto createProduct(CreateProductDto createProductRequest) throws IOException {
 
 		// ProductImage S3 업로드
 		List<ProductImageDto.Request> productImageDtos = fileStore.storeFiles(createProductRequest.getImageFiles());
@@ -80,7 +81,7 @@ public class ProductService {
 		return new PageImpl<>(productPages, PageRequest.of(currentPage, pageSize), products.size());
 	}
 
-	public ProductDto.Response getProduct(long id) {
+	public ProductDetailDto getProduct(long id) {
 
 		Product product = productRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없쪄요"));

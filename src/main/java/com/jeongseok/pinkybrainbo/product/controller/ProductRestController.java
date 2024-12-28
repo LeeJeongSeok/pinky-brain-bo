@@ -3,6 +3,7 @@ package com.jeongseok.pinkybrainbo.product.controller;
 import com.jeongseok.pinkybrainbo.common.ApiResponse;
 import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.service.ProductService;
 import jakarta.validation.Valid;
@@ -31,9 +32,9 @@ public class ProductRestController {
 	private final ProductService productService;
 
 	@PostMapping(value = "/products")
-	public ApiResponse<ProductDto.Response> createProduct(@Valid @ModelAttribute CreateProductDto createProductRequest) throws IOException {
+	public ApiResponse<ProductDetailDto> createProduct(@Valid @ModelAttribute CreateProductDto createProductRequest) throws IOException {
 
-		ProductDto.Response productDto = productService.createProduct(createProductRequest);
+		ProductDetailDto productDto = productService.createProduct(createProductRequest);
 
 		return ApiResponse.created(productDto);
 
@@ -54,9 +55,9 @@ public class ProductRestController {
 	}
 
 	@GetMapping("/products/{id}")
-	public ApiResponse<ProductDto.Response> getProduct(@PathVariable("id") long id) {
+	public ApiResponse<ProductDetailDto> getProduct(@PathVariable("id") long id) {
 
-		ProductDto.Response productResponse = productService.getProduct(id);
+		ProductDetailDto productResponse = productService.getProduct(id);
 
 		return ApiResponse.ok(productResponse);
 	}

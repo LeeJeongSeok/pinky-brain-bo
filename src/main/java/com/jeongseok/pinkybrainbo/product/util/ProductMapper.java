@@ -3,6 +3,7 @@ package com.jeongseok.pinkybrainbo.product.util;
 import com.jeongseok.pinkybrainbo.product.domain.Product;
 import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
 
@@ -16,12 +17,13 @@ public class ProductMapper {
 			.build();
 	}
 
-	public static ProductDto.Response toDto(Product product) {
-		return ProductDto.Response.builder()
+	public static ProductDetailDto toDto(Product product) {
+		return ProductDetailDto.builder()
 			.id(product.getId())
 			.name(product.getName())
 			.category(product.getCategory())
 			.description(product.getDescription())
+			.imageFiles(ProductImageMapper.toDto(product.getProductImages()))
 			.build();
 	}
 
