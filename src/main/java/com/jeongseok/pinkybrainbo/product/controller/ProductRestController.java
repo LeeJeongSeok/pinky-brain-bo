@@ -2,6 +2,7 @@ package com.jeongseok.pinkybrainbo.product.controller;
 
 import com.jeongseok.pinkybrainbo.common.ApiResponse;
 import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.service.ProductService;
 import jakarta.validation.Valid;
@@ -39,14 +40,14 @@ public class ProductRestController {
 	}
 
 	@GetMapping(value = "/products")
-	public ApiResponse<List<ProductDto.Response>> getProducts(@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("keyword") Optional<String> keyword) {
+	public ApiResponse<List<ListProductDto>> getProducts(@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("keyword") Optional<String> keyword) {
 
 		// 페이징 처리
 		int currentPage = page.orElse(1);
 		int pageSize = size.orElse(10);
 		String searchKeyword = keyword.orElse("");
 
-		Page<ProductDto.Response> productPage = productService.getPaginatedProducts(PageRequest.of(currentPage - 1, pageSize), searchKeyword);
+		Page<ListProductDto> productPage = productService.getPaginatedProducts(PageRequest.of(currentPage - 1, pageSize), searchKeyword);
 
 		// okWithPaging 메서드 사용
 		return ApiResponse.okWithPaging(productPage.getContent(), productPage);

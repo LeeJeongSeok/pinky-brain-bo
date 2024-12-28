@@ -2,6 +2,7 @@ package com.jeongseok.pinkybrainbo.product.service;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
 import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.product.util.ProductMapper;
@@ -51,7 +52,7 @@ public class ProductService {
 	}
 
 
-	public Page<ProductDto.Response> getPaginatedProducts(Pageable pageable, String searchKeyword) {
+	public Page<ListProductDto> getPaginatedProducts(Pageable pageable, String searchKeyword) {
 
 		// 페이지네이션 기본 정보 설정
 		int pageSize = pageable.getPageSize(); // 한 페이지당 항목 수
@@ -59,12 +60,12 @@ public class ProductService {
 		int startItem = currentPage * pageSize; // 현재 페이지의 시작 항목 인덱스
 
 		// ProductDto.Response가 변경되므로 해당 부분에서 페이징 처리가 되지 않음
-		List<ProductDto.Response> products = productRepository.findProductBySearchKeyword(searchKeyword)
+		List<ListProductDto> products = productRepository.findProductBySearchKeyword(searchKeyword)
 			.stream()
-			.map(ProductMapper::toDto)
+			.map(ProductMapper::toListDto)
 			.collect(Collectors.toList());
 
-		List<ProductDto.Response> productPages;
+		List<ListProductDto> productPages;
 
 		// 현재 페이지의 시작 인덱스가 전체 리스트 크기보다 큰 경우 빈 리스트 반환
 		if (products.size() < startItem) {
