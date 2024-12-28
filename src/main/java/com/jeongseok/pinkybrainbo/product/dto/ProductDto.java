@@ -49,7 +49,6 @@ public class ProductDto {
 		private String name;
 		private String category;
 		private String description;
-		private List<ProductImageDto.Response> imageFiles;
 
 	}
 

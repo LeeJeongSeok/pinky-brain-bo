@@ -32,17 +32,18 @@ public class ProductService {
 	// TODO: Response Entity에 맞춰서 값을 리턴할 수 있도록 고려해야함
 	public ProductDto.Response createProduct(ProductDto.Request createProductRequest) throws IOException {
 
+		// ProductImage S3 업로드
 		List<ProductImageDto.Request> productImageDtos = fileStore.storeFiles(createProductRequest.getImageFiles());
-		// Product 생성
-		Product product = ProductMapper.toProduct(createProductRequest);
 		// ProductImageDto -> ProductImage 변환
 		List<ProductImage> productImages = ProductImageMapper.toProductImages(productImageDtos);
+		// Product 생성
+		Product savedProduct = productRepository.save(ProductMapper.toProduct(createProductRequest));
 
+		// ProductImage 테이블에 Product ID(fk) 값 지정
 		for (ProductImage productImage : productImages) {
-			product.addProductImage(productImage);
+			productImage.addProduct(savedProduct);
+			productImageRepository.save(productImage);
 		}
-
-		Product savedProduct = productRepository.save(product);
 
 		return ProductMapper.toDto(savedProduct);
 
