@@ -1,6 +1,7 @@
 package com.jeongseok.pinkybrainbo.product.service;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
+import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.product.util.ProductMapper;
@@ -30,7 +31,7 @@ public class ProductService {
 	private final FileStore fileStore;
 
 	// TODO: Response Entity에 맞춰서 값을 리턴할 수 있도록 고려해야함
-	public ProductDto.Response createProduct(ProductDto.Request createProductRequest) throws IOException {
+	public ProductDto.Response createProduct(CreateProductDto createProductRequest) throws IOException {
 
 		// ProductImage S3 업로드
 		List<ProductImageDto.Request> productImageDtos = fileStore.storeFiles(createProductRequest.getImageFiles());
@@ -57,6 +58,7 @@ public class ProductService {
 		int currentPage = pageable.getPageNumber(); // 현재 페이지 번호 (0부터 시작)
 		int startItem = currentPage * pageSize; // 현재 페이지의 시작 항목 인덱스
 
+		// ProductDto.Response가 변경되므로 해당 부분에서 페이징 처리가 되지 않음
 		List<ProductDto.Response> products = productRepository.findProductBySearchKeyword(searchKeyword)
 			.stream()
 			.map(ProductMapper::toDto)

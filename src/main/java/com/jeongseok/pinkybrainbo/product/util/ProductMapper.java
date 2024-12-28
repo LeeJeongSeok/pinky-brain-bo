@@ -1,12 +1,13 @@
 package com.jeongseok.pinkybrainbo.product.util;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
+import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
 
 public class ProductMapper {
 
-	public static Product toProduct(ProductDto.Request createProductRequest) {
+	public static Product toProduct(CreateProductDto createProductRequest) {
 		return Product.builder()
 			.name(createProductRequest.getName())
 			.category(createProductRequest.getCategory())
