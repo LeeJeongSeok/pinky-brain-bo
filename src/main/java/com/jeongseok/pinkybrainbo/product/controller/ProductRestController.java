@@ -5,6 +5,7 @@ import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.UpdateProductDto;
 import com.jeongseok.pinkybrainbo.product.service.ProductService;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -63,9 +64,9 @@ public class ProductRestController {
 	}
 
 	@PatchMapping("/products/{id}")
-	public ApiResponse<ProductDto.Response> updateProduct(@PathVariable("id") long id, @ModelAttribute ProductDto.Request updateProductRequest) throws IOException {
+	public ApiResponse<ProductDetailDto> updateProduct(@PathVariable("id") long id, @ModelAttribute UpdateProductDto updateProductRequest) throws IOException {
 
-		ProductDto.Response updateProductDto = productService.updateProduct(id, updateProductRequest);
+		ProductDetailDto updateProductDto = productService.updateProduct(id, updateProductRequest);
 
 		return ApiResponse.ok(updateProductDto);
 	}

@@ -1,6 +1,7 @@
 package com.jeongseok.pinkybrainbo.product.domain;
 
 import com.jeongseok.pinkybrainbo.common.BaseEntity;
+import com.jeongseok.pinkybrainbo.product.dto.UpdateProductDto;
 import com.jeongseok.pinkybrainbo.product_image.domain.ProductImage;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -48,6 +49,12 @@ public class Product extends BaseEntity {
 		this.category = category;
 		this.description = description;
 		this.productImages = productImages;
+	}
+
+	public void updateProduct(UpdateProductDto updateProductDto) {
+		this.name = updateProductDto.getName();
+		this.category = updateProductDto.getCategory();
+		this.description = updateProductDto.getDescription();
 	}
 
 }

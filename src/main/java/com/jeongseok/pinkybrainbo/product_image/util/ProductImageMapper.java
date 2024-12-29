@@ -18,6 +18,16 @@ public class ProductImageMapper {
 		return productImages;
 	}
 
+	public static List<ProductImage> toUpdateProductImages(List<ProductImageDto.Request> productImageDtos, int order) {
+		List<ProductImage> productImages = new ArrayList<>();
+
+		for (ProductImageDto.Request productImageDto : productImageDtos) {
+			productImages.add(toProductImage(productImageDto, order++));
+		}
+
+		return productImages;
+	}
+
 	private static ProductImage toProductImage(ProductImageDto.Request productImageDto, int order) {
 		return ProductImage.builder()
 			.imageUrl(productImageDto.getStoreFileName())

@@ -5,6 +5,7 @@ import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.UpdateProductDto;
 import com.jeongseok.pinkybrainbo.product.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.product.util.ProductMapper;
 import com.jeongseok.pinkybrainbo.product_image.FileStore;
@@ -90,17 +91,57 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ProductDto.Response updateProduct(long id, ProductDto.Request updateProductRequest) throws IOException {
+	public ProductDetailDto updateProduct(long id, UpdateProductDto updateProductRequest) throws IOException {
 
-		// 새로운 이미지 파일 저장
-		List<ProductImageDto.Request> updateProductImageDtos = fileStore.storeFiles(updateProductRequest.getImageFiles());
-		List<ProductImage> newImages = ProductImageMapper.toProductImages(updateProductImageDtos);
-
-		// 기존 상품 및 이미지 조회
-		Product savedProduct = productRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없습니다."));
+		// 기존 상품 이미지 조회
 		List<ProductImage> existingImages = productImageRepository.findByProduct_Id(id)
 			.orElseThrow(() -> new IllegalArgumentException("상품 이미지 데이터가 없습니다."));
+
+		// 기존 상품 조회
+		Product savedProduct = productRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없습니다."));
+
+		// 삭제할 이미지
+		List<Long> imagesToDeleteId = updateProductRequest.getImagesToDelete();
+
+		// 기존 상품 이미지에서 삭제할 이미지를 필터링
+		List<Long> deleteList = existingImages.stream()
+			.filter(existingImage -> imagesToDeleteId.contains(existingImage.getId()))
+			.map(ProductImage::getId)
+			.toList();
+
+		// 필터링 대상 이후 살아남은 이미지 필터링
+		List<ProductImage> updatedImages = existingImages.stream()
+			.filter(existingImage -> !imagesToDeleteId.contains(existingImage.getId()))
+			.toList();
+
+		// 삭제된 이미지 삭제 쿼리 진행
+		for (Long imageId : deleteList) {
+			productImageRepository.deleteById(imageId);
+		}
+
+
+		// 새롭게 추가될 이미지
+		// 추가될 때, 기존 이미지의 순서와 맞게 업로드 되어야한다.
+		// 살아남은 이미지의 order 값 중 최대값 가져온다.
+		// 살아남은 이미지의 order 값 중 최대값 가져오기
+		int maxOrder = updatedImages.stream()
+			.mapToInt(ProductImage::getImageOrder)
+			.max()
+			.orElse(0); // 살아남은 이미지가 없을 경우 기본값 0
+
+		// 새로운 이미지 파일 저장
+		List<ProductImageDto.Request> updateProductImageDtos = fileStore.storeFiles(updateProductRequest.getNewImages());
+		List<ProductImage> newImages = ProductImageMapper.toUpdateProductImages(updateProductImageDtos, maxOrder);
+
+		// product_id cannot be null
+		for (ProductImage newImage : newImages) {
+			newImage.addProduct(savedProduct);
+			productImageRepository.save(newImage);
+		}
+
+		// 상품 정보 업데이트
+		savedProduct.updateProduct(updateProductRequest);
 
 		return null;
 	}
