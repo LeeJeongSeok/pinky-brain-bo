@@ -26,6 +26,16 @@ public class ProductMapper {
 			.build();
 	}
 
+	public static ProductDetailDto toDetailDto(Product product) {
+		return ProductDetailDto.builder()
+			.id(product.getId())
+			.name(product.getName())
+			.category(product.getCategory())
+			.description(product.getDescription())
+			.imageFiles(ProductImageMapper.toDto(product.getProductImages()))
+			.build();
+	}
+
 	public static ListProductDto toListDto(Product product) {
 		return ListProductDto.builder()
 			.id(product.getId())

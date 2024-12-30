@@ -86,7 +86,7 @@ public class ProductService {
 		Product product = productRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없쪄요"));
 
-		return ProductMapper.toDto(product);
+		return ProductMapper.toDetailDto(product);
 	}
 
 	@Transactional
