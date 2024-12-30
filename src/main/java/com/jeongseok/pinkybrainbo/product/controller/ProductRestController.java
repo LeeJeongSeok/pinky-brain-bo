@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -69,5 +70,13 @@ public class ProductRestController {
 		ProductDetailDto updateProductDto = productService.updateProduct(id, updateProductRequest);
 
 		return ApiResponse.ok(updateProductDto);
+	}
+
+	@DeleteMapping("/products/{id}")
+	public ApiResponse<Void> deleteProduct(@PathVariable("id") long id) {
+
+		productService.deleteProduct(id);
+
+		return ApiResponse.ok(null);
 	}
 }

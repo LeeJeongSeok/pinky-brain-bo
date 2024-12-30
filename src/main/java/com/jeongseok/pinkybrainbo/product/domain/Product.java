@@ -17,6 +17,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -38,7 +40,8 @@ public class Product extends BaseEntity {
 	@Column(name = "description")
 	private String description;
 
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OnDelete(action = OnDeleteAction.CASCADE) // 데이터베이스 레벨에서도 연관된 엔티티 삭제
 	private List<ProductImage> productImages = new ArrayList<>();
 
 

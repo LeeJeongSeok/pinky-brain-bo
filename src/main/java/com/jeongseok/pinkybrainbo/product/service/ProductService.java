@@ -4,7 +4,6 @@ import com.jeongseok.pinkybrainbo.product.domain.Product;
 import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
-import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.UpdateProductDto;
 import com.jeongseok.pinkybrainbo.product.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.product.util.ProductMapper;
@@ -146,4 +145,13 @@ public class ProductService {
 		return null;
 	}
 
+	@Transactional
+	public void deleteProduct(long id) {
+
+		// 기존 상품 조회
+		Product savedProduct = productRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없습니다."));
+
+		productRepository.delete(savedProduct);
+	}
 }

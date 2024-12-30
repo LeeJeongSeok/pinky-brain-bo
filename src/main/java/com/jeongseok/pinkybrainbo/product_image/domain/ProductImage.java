@@ -15,6 +15,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -27,6 +29,7 @@ public class ProductImage extends BaseEntity {
 	private long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE) // 부모 엔티티 삭제 시 함께 삭제
 	@JoinColumn(name = "product_id")
 	private Product product;
 

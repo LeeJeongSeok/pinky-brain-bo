@@ -23,7 +23,6 @@ public class ProductMapper {
 			.name(product.getName())
 			.category(product.getCategory())
 			.description(product.getDescription())
-			.imageFiles(ProductImageMapper.toDto(product.getProductImages()))
 			.build();
 	}
 
