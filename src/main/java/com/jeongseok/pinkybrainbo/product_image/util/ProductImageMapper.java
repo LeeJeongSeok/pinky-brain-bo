@@ -22,7 +22,7 @@ public class ProductImageMapper {
 		List<ProductImage> productImages = new ArrayList<>();
 
 		for (ProductImageDto.Request productImageDto : productImageDtos) {
-			productImages.add(toProductImage(productImageDto, order++));
+			productImages.add(toProductImage(productImageDto, ++order));
 		}
 
 		return productImages;
