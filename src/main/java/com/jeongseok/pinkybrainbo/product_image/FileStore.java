@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.jeongseok.pinkybrainbo.common.S3Config;
 import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto;
+import com.jeongseok.pinkybrainbo.product_image.dto.request.AddProductImageRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class FileStore {
 		return fileDir + filename;
 	}
 
-	public List<ProductImageDto.Request> storeFiles(List<MultipartFile> files) throws IOException {
-		List<ProductImageDto.Request> storeFileResult = new ArrayList<>();
+	public List<AddProductImageRequest> storeFiles(List<MultipartFile> files) throws IOException {
+		List<AddProductImageRequest> storeFileResult = new ArrayList<>();
 		for (MultipartFile file : files) {
 			if (!file.isEmpty()) {
 				storeFileResult.add(storeFile(file));
@@ -40,7 +41,7 @@ public class FileStore {
 		return storeFileResult;
 	}
 
-	public ProductImageDto.Request storeFile(MultipartFile file) throws IOException {
+	public AddProductImageRequest storeFile(MultipartFile file) throws IOException {
 
 		if (file.isEmpty()) {
 			return null;
@@ -56,7 +57,7 @@ public class FileStore {
 		// S3에 파일 업로드
 		String s3UploadFileName = putS3(storeFileName, localFile);
 
-		return new ProductImageDto.Request(originalFilename, s3UploadFileName);
+		return new AddProductImageRequest(originalFilename, s3UploadFileName);
 
 	}
 
