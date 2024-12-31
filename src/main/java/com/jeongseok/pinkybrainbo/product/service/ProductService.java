@@ -41,13 +41,14 @@ public class ProductService {
 		// ProductImageDto -> ProductImage 변환
 		List<ProductImage> productImages = ProductImageMapper.toDomain(productImageDtos);
 		// Product 생성
-		Product savedProduct = productRepository.save(ProductMapper.toDomain(addProductRequest));
+		Product product = ProductMapper.toDomain(addProductRequest);
 
 		// ProductImage 테이블에 Product ID(fk) 값 지정
 		for (ProductImage productImage : productImages) {
-			productImage.addProduct(savedProduct);
-			productImageRepository.save(productImage);
+			productImage.addProduct(product);
 		}
+
+		Product savedProduct = productRepository.save(product);
 
 		return ProductMapper.toResponse(savedProduct);
 
