@@ -1,17 +1,16 @@
 package com.jeongseok.pinkybrainbo.product.service;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
-import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
-import com.jeongseok.pinkybrainbo.product.dto.UpdateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.request.AddProductRequest;
+import com.jeongseok.pinkybrainbo.product.dto.request.ModifyProductRequest;
 import com.jeongseok.pinkybrainbo.product.dto.response.ProductResponse;
 import com.jeongseok.pinkybrainbo.product.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.product.util.ProductMapper;
 import com.jeongseok.pinkybrainbo.product_image.FileStore;
 import com.jeongseok.pinkybrainbo.product_image.domain.ProductImage;
-import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto;
+import com.jeongseok.pinkybrainbo.product_image.dto.request.AddProductImageRequest;
 import com.jeongseok.pinkybrainbo.product_image.repository.ProductImageRepository;
 import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
 import jakarta.transaction.Transactional;
@@ -38,9 +37,9 @@ public class ProductService {
 	public ProductResponse createProduct(AddProductRequest addProductRequest) throws IOException {
 
 		// ProductImage S3 업로드
-		List<ProductImageDto.Request> productImageDtos = fileStore.storeFiles(addProductRequest.getImageFiles());
+		List<AddProductImageRequest> productImageDtos = fileStore.storeFiles(addProductRequest.getImageFiles());
 		// ProductImageDto -> ProductImage 변환
-		List<ProductImage> productImages = ProductImageMapper.toProductImages(productImageDtos);
+		List<ProductImage> productImages = ProductImageMapper.toDomain(productImageDtos);
 		// Product 생성
 		Product savedProduct = productRepository.save(ProductMapper.toDomain(addProductRequest));
 
@@ -92,7 +91,7 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ProductDetailDto updateProduct(long id, UpdateProductDto updateProductRequest) throws IOException {
+	public ProductDetailDto updateProduct(long id, ModifyProductRequest modifyProductRequest) throws IOException {
 
 		// 기존 상품 이미지 조회
 		List<ProductImage> existingImages = productImageRepository.findByProduct_Id(id)
@@ -103,7 +102,7 @@ public class ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없습니다."));
 
 		// 삭제할 이미지
-		List<Long> imagesToDeleteId = updateProductRequest.getImagesToDelete();
+		List<Long> imagesToDeleteId = modifyProductRequest.getImagesToDelete();
 
 		// 기존 상품 이미지에서 삭제할 이미지를 필터링
 		List<Long> deleteList = existingImages.stream()
@@ -132,8 +131,8 @@ public class ProductService {
 			.orElse(0); // 살아남은 이미지가 없을 경우 기본값 0
 
 		// 새로운 이미지 파일 저장
-		List<ProductImageDto.Request> updateProductImageDtos = fileStore.storeFiles(updateProductRequest.getNewImages());
-		List<ProductImage> newImages = ProductImageMapper.toUpdateProductImages(updateProductImageDtos, maxOrder);
+		List<AddProductImageRequest> updateProductImageDtos = fileStore.storeFiles(modifyProductRequest.getNewImages());
+		List<ProductImage> newImages = ProductImageMapper.toDomain(updateProductImageDtos, maxOrder);
 
 		// product_id cannot be null
 		for (ProductImage newImage : newImages) {
@@ -142,7 +141,7 @@ public class ProductService {
 		}
 
 		// 상품 정보 업데이트
-		savedProduct.updateProduct(updateProductRequest);
+		savedProduct.updateProduct(modifyProductRequest);
 
 		return null;
 	}
