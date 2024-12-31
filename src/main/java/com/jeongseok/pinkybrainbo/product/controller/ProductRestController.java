@@ -37,7 +37,6 @@ public class ProductRestController {
 	public ApiResponse<ProductResponse> createProduct(@Valid @ModelAttribute AddProductRequest addProductRequest) throws IOException {
 
 		return ApiResponse.created(productService.createProduct(addProductRequest));
-
 	}
 
 	@GetMapping(value = "/products")
