@@ -1,13 +1,12 @@
 package com.jeongseok.pinkybrainbo.product.util;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
-import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
-import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.request.AddProductRequest;
 import com.jeongseok.pinkybrainbo.product.dto.response.ProductResponse;
 import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
+import java.util.ArrayList;
 
 public class ProductMapper {
 
@@ -16,6 +15,7 @@ public class ProductMapper {
 			.name(addProductRequest.getName())
 			.category(addProductRequest.getCategory())
 			.description(addProductRequest.getDescription())
+			.productImages(new ArrayList<>())
 			.build();
 	}
 
@@ -25,6 +25,7 @@ public class ProductMapper {
 			.name(product.getName())
 			.category(product.getCategory())
 			.description(product.getDescription())
+			.imageFiles(ProductImageMapper.toResponse(product.getProductImages()))
 			.build();
 	}
 
@@ -34,7 +35,7 @@ public class ProductMapper {
 			.name(product.getName())
 			.category(product.getCategory())
 			.description(product.getDescription())
-			.imageFiles(ProductImageMapper.toDto(product.getProductImages()))
+//			.imageFiles(ProductImageMapper.toDto(product.getProductImages()))
 			.build();
 	}
 
@@ -44,7 +45,7 @@ public class ProductMapper {
 			.name(product.getName())
 			.category(product.getCategory())
 			.description(product.getDescription())
-			.imageFiles(ProductImageMapper.toDto(product.getProductImages()))
+//			.imageFiles(ProductImageMapper.toDto(product.getProductImages()))
 			.build();
 	}
 }
