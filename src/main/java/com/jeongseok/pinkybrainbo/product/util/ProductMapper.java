@@ -5,20 +5,22 @@ import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.request.AddProductRequest;
+import com.jeongseok.pinkybrainbo.product.dto.response.ProductResponse;
 import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
 
 public class ProductMapper {
 
-	public static Product toProduct(CreateProductDto createProductRequest) {
+	public static Product toDomain(AddProductRequest addProductRequest) {
 		return Product.builder()
-			.name(createProductRequest.getName())
-			.category(createProductRequest.getCategory())
-			.description(createProductRequest.getDescription())
+			.name(addProductRequest.getName())
+			.category(addProductRequest.getCategory())
+			.description(addProductRequest.getDescription())
 			.build();
 	}
 
-	public static ProductDetailDto toDto(Product product) {
-		return ProductDetailDto.builder()
+	public static ProductResponse toResponse(Product product) {
+		return ProductResponse.builder()
 			.id(product.getId())
 			.name(product.getName())
 			.category(product.getCategory())

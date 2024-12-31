@@ -5,6 +5,8 @@ import com.jeongseok.pinkybrainbo.product.dto.CreateProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.UpdateProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.request.AddProductRequest;
+import com.jeongseok.pinkybrainbo.product.dto.response.ProductResponse;
 import com.jeongseok.pinkybrainbo.product.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.product.util.ProductMapper;
 import com.jeongseok.pinkybrainbo.product_image.FileStore;
@@ -33,14 +35,14 @@ public class ProductService {
 	private final FileStore fileStore;
 
 	// TODO: Response Entity에 맞춰서 값을 리턴할 수 있도록 고려해야함
-	public ProductDetailDto createProduct(CreateProductDto createProductRequest) throws IOException {
+	public ProductResponse createProduct(AddProductRequest addProductRequest) throws IOException {
 
 		// ProductImage S3 업로드
-		List<ProductImageDto.Request> productImageDtos = fileStore.storeFiles(createProductRequest.getImageFiles());
+		List<ProductImageDto.Request> productImageDtos = fileStore.storeFiles(addProductRequest.getImageFiles());
 		// ProductImageDto -> ProductImage 변환
 		List<ProductImage> productImages = ProductImageMapper.toProductImages(productImageDtos);
 		// Product 생성
-		Product savedProduct = productRepository.save(ProductMapper.toProduct(createProductRequest));
+		Product savedProduct = productRepository.save(ProductMapper.toDomain(addProductRequest));
 
 		// ProductImage 테이블에 Product ID(fk) 값 지정
 		for (ProductImage productImage : productImages) {
@@ -48,7 +50,7 @@ public class ProductService {
 			productImageRepository.save(productImage);
 		}
 
-		return ProductMapper.toDto(savedProduct);
+		return ProductMapper.toResponse(savedProduct);
 
 	}
 

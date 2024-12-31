@@ -6,6 +6,8 @@ import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.UpdateProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.request.AddProductRequest;
+import com.jeongseok.pinkybrainbo.product.dto.response.ProductResponse;
 import com.jeongseok.pinkybrainbo.product.service.ProductService;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -34,11 +36,9 @@ public class ProductRestController {
 	private final ProductService productService;
 
 	@PostMapping(value = "/products")
-	public ApiResponse<ProductDetailDto> createProduct(@Valid @ModelAttribute CreateProductDto createProductRequest) throws IOException {
+	public ApiResponse<ProductResponse> createProduct(@Valid @ModelAttribute AddProductRequest addProductRequest) throws IOException {
 
-		ProductDetailDto productDto = productService.createProduct(createProductRequest);
-
-		return ApiResponse.created(productDto);
+		return ApiResponse.created(productService.createProduct(addProductRequest));
 
 	}
 
