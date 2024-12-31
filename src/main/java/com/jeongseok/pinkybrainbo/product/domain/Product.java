@@ -2,6 +2,7 @@ package com.jeongseok.pinkybrainbo.product.domain;
 
 import com.jeongseok.pinkybrainbo.common.BaseEntity;
 import com.jeongseok.pinkybrainbo.product.dto.UpdateProductDto;
+import com.jeongseok.pinkybrainbo.product.dto.request.ModifyProductRequest;
 import com.jeongseok.pinkybrainbo.product_image.domain.ProductImage;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -54,10 +55,10 @@ public class Product extends BaseEntity {
 		this.productImages = productImages;
 	}
 
-	public void updateProduct(UpdateProductDto updateProductDto) {
-		this.name = updateProductDto.getName();
-		this.category = updateProductDto.getCategory();
-		this.description = updateProductDto.getDescription();
+	public void updateProduct(ModifyProductRequest modifyProductRequest) {
+		this.name = modifyProductRequest.getName();
+		this.category = modifyProductRequest.getCategory();
+		this.description = modifyProductRequest.getDescription();
 	}
 
 }
