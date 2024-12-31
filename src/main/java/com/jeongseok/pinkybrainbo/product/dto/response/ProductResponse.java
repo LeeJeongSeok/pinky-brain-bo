@@ -1,6 +1,6 @@
 package com.jeongseok.pinkybrainbo.product.dto.response;
 
-import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto.Response;
+import com.jeongseok.pinkybrainbo.product_image.dto.response.ProductImageResponse;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +13,6 @@ public class ProductResponse {
 	private String name;
 	private String category;
 	private String description;
-	private List<Response> imageFiles;
+	private List<ProductImageResponse> imageFiles;
 
 }
