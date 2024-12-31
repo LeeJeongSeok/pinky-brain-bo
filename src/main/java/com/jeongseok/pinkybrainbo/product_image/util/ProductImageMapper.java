@@ -1,8 +1,8 @@
 package com.jeongseok.pinkybrainbo.product_image.util;
 
 import com.jeongseok.pinkybrainbo.product_image.domain.ProductImage;
-import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto;
 import com.jeongseok.pinkybrainbo.product_image.dto.request.AddProductImageRequest;
+import com.jeongseok.pinkybrainbo.product_image.dto.response.ProductImageResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +31,11 @@ public class ProductImageMapper {
 		return productImages;
 	}
 
-	public static List<ProductImageDto.Response> toDto(List<ProductImage> productImages) {
-		List<ProductImageDto.Response> productImageDtos = new ArrayList<>();
+	public static List<ProductImageResponse> toResponse(List<ProductImage> productImages) {
+		List<ProductImageResponse> productImageDtos = new ArrayList<>();
 
 		for (ProductImage productImage : productImages) {
-			productImageDtos.add(toDto(productImage));
+			productImageDtos.add(toResponse(productImage));
 		}
 
 		return productImageDtos;
@@ -48,8 +48,8 @@ public class ProductImageMapper {
 			.build();
 	}
 
-	private static ProductImageDto.Response toDto(ProductImage productImage) {
-		return ProductImageDto.Response.builder()
+	private static ProductImageResponse toResponse(ProductImage productImage) {
+		return ProductImageResponse.builder()
 			.id(productImage.getId())
 			.imageUrl(productImage.getImageUrl())
 			.imageOrder(productImage.getImageOrder())
