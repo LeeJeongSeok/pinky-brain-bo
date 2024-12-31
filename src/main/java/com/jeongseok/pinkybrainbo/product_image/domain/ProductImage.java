@@ -49,6 +49,7 @@ public class ProductImage extends BaseEntity {
 
 	public void addProduct(Product product) {
 		this.product = product;
+		product.getProductImages().add(this);
 	}
 
 }
