@@ -40,31 +40,31 @@ public class ProductRestController {
 	}
 
 	@GetMapping(value = "/products")
-	public ApiResponse<List<ListProductDto>> getProducts(@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("keyword") Optional<String> keyword) {
+	public ApiResponse<List<ProductResponse>> getProducts(@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("keyword") Optional<String> keyword) {
 
 		// 페이징 처리
 		int currentPage = page.orElse(1);
 		int pageSize = size.orElse(10);
 		String searchKeyword = keyword.orElse("");
 
-		Page<ListProductDto> productPage = productService.getPaginatedProducts(PageRequest.of(currentPage - 1, pageSize), searchKeyword);
+		Page<ProductResponse> productPage = productService.getPaginatedProducts(PageRequest.of(currentPage - 1, pageSize), searchKeyword);
 
 		// okWithPaging 메서드 사용
 		return ApiResponse.okWithPaging(productPage.getContent(), productPage);
 	}
 
 	@GetMapping("/products/{id}")
-	public ApiResponse<ProductDetailDto> getProduct(@PathVariable("id") long id) {
+	public ApiResponse<ProductResponse> getProduct(@PathVariable("id") long id) {
 
-		ProductDetailDto productResponse = productService.getProduct(id);
+		ProductResponse productResponse = productService.getProduct(id);
 
 		return ApiResponse.ok(productResponse);
 	}
 
 	@PatchMapping("/products/{id}")
-	public ApiResponse<ProductDetailDto> updateProduct(@PathVariable("id") long id, @ModelAttribute ModifyProductRequest modifyProductRequest) throws IOException {
+	public ApiResponse<ProductResponse> updateProduct(@PathVariable("id") long id, @ModelAttribute ModifyProductRequest modifyProductRequest) throws IOException {
 
-		ProductDetailDto updateProductDto = productService.updateProduct(id, modifyProductRequest);
+		ProductResponse updateProductDto = productService.updateProduct(id, modifyProductRequest);
 
 		return ApiResponse.ok(updateProductDto);
 	}

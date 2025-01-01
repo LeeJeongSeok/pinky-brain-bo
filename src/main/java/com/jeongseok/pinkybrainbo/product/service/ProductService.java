@@ -1,7 +1,6 @@
 package com.jeongseok.pinkybrainbo.product.service;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
-import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
 import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.request.AddProductRequest;
 import com.jeongseok.pinkybrainbo.product.dto.request.ModifyProductRequest;
@@ -55,7 +54,7 @@ public class ProductService {
 	}
 
 
-	public Page<ListProductDto> getPaginatedProducts(Pageable pageable, String searchKeyword) {
+	public Page<ProductResponse> getPaginatedProducts(Pageable pageable, String searchKeyword) {
 
 		// 페이지네이션 기본 정보 설정
 		int pageSize = pageable.getPageSize(); // 한 페이지당 항목 수
@@ -63,12 +62,12 @@ public class ProductService {
 		int startItem = currentPage * pageSize; // 현재 페이지의 시작 항목 인덱스
 
 		// ProductDto.Response가 변경되므로 해당 부분에서 페이징 처리가 되지 않음
-		List<ListProductDto> products = productRepository.findProductBySearchKeyword(searchKeyword)
+		List<ProductResponse> products = productRepository.findProductBySearchKeyword(searchKeyword)
 			.stream()
-			.map(ProductMapper::toListDto)
+			.map(ProductMapper::toResponse)
 			.collect(Collectors.toList());
 
-		List<ListProductDto> productPages;
+		List<ProductResponse> productPages;
 
 		// 현재 페이지의 시작 인덱스가 전체 리스트 크기보다 큰 경우 빈 리스트 반환
 		if (products.size() < startItem) {
@@ -83,16 +82,16 @@ public class ProductService {
 		return new PageImpl<>(productPages, PageRequest.of(currentPage, pageSize), products.size());
 	}
 
-	public ProductDetailDto getProduct(long id) {
+	public ProductResponse getProduct(long id) {
 
 		Product product = productRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없쪄요"));
 
-		return ProductMapper.toDetailDto(product);
+		return ProductMapper.toResponse(product);
 	}
 
 	@Transactional
-	public ProductDetailDto updateProduct(long id, ModifyProductRequest modifyProductRequest) throws IOException {
+	public ProductResponse updateProduct(long id, ModifyProductRequest modifyProductRequest) throws IOException {
 
 		// 기존 상품 이미지 조회
 		List<ProductImage> existingImages = productImageRepository.findByProduct_Id(id)
@@ -103,6 +102,7 @@ public class ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없습니다."));
 
 		// 삭제할 이미지
+		// TODO: 삭제할 이미지가 없는 경우에 대한 로직 처리
 		List<Long> imagesToDeleteId = modifyProductRequest.getImagesToDelete();
 
 		// 기존 상품 이미지에서 삭제할 이미지를 필터링
