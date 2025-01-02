@@ -1,7 +1,6 @@
 package com.jeongseok.pinkybrainbo.product.service;
 
 import com.jeongseok.pinkybrainbo.product.domain.Product;
-import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
 import com.jeongseok.pinkybrainbo.product.dto.request.AddProductRequest;
 import com.jeongseok.pinkybrainbo.product.dto.request.ModifyProductRequest;
 import com.jeongseok.pinkybrainbo.product.dto.response.ProductResponse;
@@ -23,6 +22,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -102,43 +102,80 @@ public class ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없습니다."));
 
 		// 삭제할 이미지
-		// TODO: 삭제할 이미지가 없는 경우에 대한 로직 처리
 		List<Long> imagesToDeleteId = modifyProductRequest.getImagesToDelete();
+		List<MultipartFile> newImages = modifyProductRequest.getNewImages();
 
-		// 기존 상품 이미지에서 삭제할 이미지를 필터링
-		List<Long> deleteList = existingImages.stream()
-			.filter(existingImage -> imagesToDeleteId.contains(existingImage.getId()))
-			.map(ProductImage::getId)
-			.toList();
+		// 이미지 파일을 삭제하는 경우
+		if (imagesToDeleteId != null && newImages == null) {
+			// 기존 상품 이미지에서 삭제할 이미지를 필터링
+			List<Long> deleteList = existingImages.stream()
+				.filter(existingImage -> imagesToDeleteId.contains(existingImage.getId()))
+				.map(ProductImage::getId)
+				.toList();
 
-		// 필터링 대상 이후 살아남은 이미지 필터링
-		List<ProductImage> updatedImages = existingImages.stream()
-			.filter(existingImage -> !imagesToDeleteId.contains(existingImage.getId()))
-			.toList();
-
-		// 삭제된 이미지 삭제 쿼리 진행
-		for (Long imageId : deleteList) {
-			productImageRepository.deleteById(imageId);
+			// 삭제된 이미지 삭제 쿼리 진행
+			for (Long imageId : deleteList) {
+				productImageRepository.deleteById(imageId);
+			}
 		}
 
+		// 이미지 파일을 추가할 경우
+		if (imagesToDeleteId == null && newImages != null) {
+			// 새롭게 추가될 이미지
+			// 추가될 때, 기존 이미지의 순서와 맞게 업로드 되어야한다.
+			int maxOrder = existingImages.stream()
+				.mapToInt(ProductImage::getImageOrder)
+				.max()
+				.orElse(0);
 
-		// 새롭게 추가될 이미지
-		// 추가될 때, 기존 이미지의 순서와 맞게 업로드 되어야한다.
-		// 살아남은 이미지의 order 값 중 최대값 가져온다.
-		// 살아남은 이미지의 order 값 중 최대값 가져오기
-		int maxOrder = updatedImages.stream()
-			.mapToInt(ProductImage::getImageOrder)
-			.max()
-			.orElse(0); // 살아남은 이미지가 없을 경우 기본값 0
+			// 새로운 이미지 파일 저장
+			List<AddProductImageRequest> updateProductImageDtos = fileStore.storeFiles(modifyProductRequest.getNewImages());
+			List<ProductImage> saveNewImages = ProductImageMapper.toDomain(updateProductImageDtos, maxOrder);
 
-		// 새로운 이미지 파일 저장
-		List<AddProductImageRequest> updateProductImageDtos = fileStore.storeFiles(modifyProductRequest.getNewImages());
-		List<ProductImage> newImages = ProductImageMapper.toDomain(updateProductImageDtos, maxOrder);
+			// product_id cannot be null
+			for (ProductImage newImage : saveNewImages) {
+				newImage.addProduct(savedProduct);
+				productImageRepository.save(newImage);
+			}
+		}
 
-		// product_id cannot be null
-		for (ProductImage newImage : newImages) {
-			newImage.addProduct(savedProduct);
-			productImageRepository.save(newImage);
+		// 이미지 파일을 삭제 및 추가를 동시에 하는 경우
+		if (imagesToDeleteId != null && newImages != null) {
+			// 기존 상품 이미지에서 삭제할 이미지를 필터링
+			List<Long> deleteList = existingImages.stream()
+				.filter(existingImage -> imagesToDeleteId.contains(existingImage.getId()))
+				.map(ProductImage::getId)
+				.toList();
+
+			// 필터링 대상 이후 살아남은 이미지 필터링
+			List<ProductImage> updatedImages = existingImages.stream()
+				.filter(existingImage -> !imagesToDeleteId.contains(existingImage.getId()))
+				.toList();
+
+			// 삭제된 이미지 삭제 쿼리 진행
+			for (Long imageId : deleteList) {
+				productImageRepository.deleteById(imageId);
+			}
+
+
+			// 새롭게 추가될 이미지
+			// 추가될 때, 기존 이미지의 순서와 맞게 업로드 되어야한다.
+			// 살아남은 이미지의 order 값 중 최대값 가져온다.
+			// 살아남은 이미지의 order 값 중 최대값 가져오기
+			int maxOrder = updatedImages.stream()
+				.mapToInt(ProductImage::getImageOrder)
+				.max()
+				.orElse(0); // 살아남은 이미지가 없을 경우 기본값 0
+
+			// 새로운 이미지 파일 저장
+			List<AddProductImageRequest> updateProductImageDtos = fileStore.storeFiles(modifyProductRequest.getNewImages());
+			List<ProductImage> saveNewImages = ProductImageMapper.toDomain(updateProductImageDtos, maxOrder);
+
+			// product_id cannot be null
+			for (ProductImage newImage : saveNewImages) {
+				newImage.addProduct(savedProduct);
+				productImageRepository.save(newImage);
+			}
 		}
 
 		// 상품 정보 업데이트
