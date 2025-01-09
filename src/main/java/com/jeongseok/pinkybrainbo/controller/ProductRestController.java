@@ -1,12 +1,10 @@
-package com.jeongseok.pinkybrainbo.product.controller;
+package com.jeongseok.pinkybrainbo.controller;
 
 import com.jeongseok.pinkybrainbo.common.ApiResponse;
-import com.jeongseok.pinkybrainbo.product.dto.ListProductDto;
-import com.jeongseok.pinkybrainbo.product.dto.ProductDetailDto;
-import com.jeongseok.pinkybrainbo.product.dto.request.AddProductRequest;
-import com.jeongseok.pinkybrainbo.product.dto.request.ModifyProductRequest;
-import com.jeongseok.pinkybrainbo.product.dto.response.ProductResponse;
-import com.jeongseok.pinkybrainbo.product.service.ProductService;
+import com.jeongseok.pinkybrainbo.dto.AddProductRequest;
+import com.jeongseok.pinkybrainbo.dto.ModifyProductRequest;
+import com.jeongseok.pinkybrainbo.dto.ProductResponse;
+import com.jeongseok.pinkybrainbo.service.ProductService;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;

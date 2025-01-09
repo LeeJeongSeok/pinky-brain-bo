@@ -1,4 +1,4 @@
-package com.jeongseok.pinkybrainbo.product.controller;
+package com.jeongseok.pinkybrainbo.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
