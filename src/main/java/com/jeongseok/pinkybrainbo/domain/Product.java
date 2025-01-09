@@ -1,9 +1,7 @@
-package com.jeongseok.pinkybrainbo.product.domain;
+package com.jeongseok.pinkybrainbo.domain;
 
 import com.jeongseok.pinkybrainbo.common.BaseEntity;
-import com.jeongseok.pinkybrainbo.product.dto.UpdateProductDto;
-import com.jeongseok.pinkybrainbo.product.dto.request.ModifyProductRequest;
-import com.jeongseok.pinkybrainbo.product_image.domain.ProductImage;
+import com.jeongseok.pinkybrainbo.dto.ModifyProductRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
