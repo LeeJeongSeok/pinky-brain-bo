@@ -1,10 +1,8 @@
-package com.jeongseok.pinkybrainbo.product_image;
+package com.jeongseok.pinkybrainbo.common;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.jeongseok.pinkybrainbo.common.S3Config;
-import com.jeongseok.pinkybrainbo.product_image.dto.ProductImageDto;
-import com.jeongseok.pinkybrainbo.product_image.dto.request.AddProductImageRequest;
+import com.jeongseok.pinkybrainbo.dto.AddProductImageRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

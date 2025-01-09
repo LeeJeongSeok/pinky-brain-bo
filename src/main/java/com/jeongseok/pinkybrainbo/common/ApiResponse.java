@@ -1,6 +1,8 @@
 package com.jeongseok.pinkybrainbo.common;
 
 
+import com.jeongseok.pinkybrainbo.exception.CustomException;
+import com.jeongseok.pinkybrainbo.exception.ExceptionDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
