@@ -4,6 +4,7 @@ import com.jeongseok.pinkybrainbo.common.ApiResponse;
 import com.jeongseok.pinkybrainbo.dto.request.AddProductRequest;
 import com.jeongseok.pinkybrainbo.dto.request.ModifyProductRequest;
 import com.jeongseok.pinkybrainbo.dto.response.ProductResponse;
+import com.jeongseok.pinkybrainbo.exception.SuccessCode;
 import com.jeongseok.pinkybrainbo.service.ProductService;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class ProductRestController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public ApiResponse<ProductResponse> createProduct(@Valid @ModelAttribute AddProductRequest addProductRequest) throws IOException {
 
-		return ApiResponse.created(productService.createProduct(addProductRequest));
+		return ApiResponse.success(SuccessCode.PRODUCT_CREATE_SUCCESS, productService.createProduct(addProductRequest));
 	}
 
 	@GetMapping(value = "/products")
@@ -52,7 +53,7 @@ public class ProductRestController {
 		Page<ProductResponse> productPage = productService.getPaginatedProducts(PageRequest.of(currentPage - 1, pageSize), searchKeyword);
 
 		// okWithPaging 메서드 사용
-		return ApiResponse.okWithPaging(productPage.getContent(), productPage);
+		return ApiResponse.successWithPaging(SuccessCode.PRODUCT_LIST_GET_SUCCESS, productPage.getContent(), productPage);
 	}
 
 	@GetMapping("/products/{id}")
@@ -61,7 +62,7 @@ public class ProductRestController {
 
 		ProductResponse productResponse = productService.getProduct(id);
 
-		return ApiResponse.ok(productResponse);
+		return ApiResponse.success(SuccessCode.PRODUCT_GET_SUCCESS, productResponse);
 	}
 
 	@PatchMapping("/products/{id}")
@@ -70,7 +71,7 @@ public class ProductRestController {
 
 		ProductResponse updateProductDto = productService.updateProduct(id, modifyProductRequest);
 
-		return ApiResponse.ok(updateProductDto);
+		return ApiResponse.success(SuccessCode.PRODUCT_UPDATE_SUCCESS, updateProductDto);
 	}
 
 	@DeleteMapping("/products/{id}")
@@ -79,6 +80,6 @@ public class ProductRestController {
 
 		productService.deleteProduct(id);
 
-		return ApiResponse.ok(null);
+		return ApiResponse.success(SuccessCode.PRODUCT_DELETE_SUCCESS);
 	}
 }

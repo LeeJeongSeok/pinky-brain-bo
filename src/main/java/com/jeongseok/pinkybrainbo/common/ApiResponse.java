@@ -6,9 +6,13 @@ import com.jeongseok.pinkybrainbo.exception.ErrorCode;
 import com.jeongseok.pinkybrainbo.exception.SuccessCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
 
@@ -40,14 +44,16 @@ public class ApiResponse<T> {
 	}
 
 	// 페이지 정보를 담는 내부 레코드
-	public record PageInfo(
-		int currentPage,
-		int pageSize,
-		int totalPages,
-		long totalElements,
-		boolean hasNext,
-		boolean hasPrevious
-	) {
+	@Getter
+	@AllArgsConstructor
+	private static class PageInfo {
+		private int currentPage;
+		private int pageSize;
+		private int totalPages;
+		private long totalElements;
+		private boolean hasNext;
+		private boolean hasPrevious;
+
 		public static PageInfo of(Page<?> page) {
 			return new PageInfo(
 				page.getNumber() + 1,  // 페이지 번호는 0부터 시작하므로 +1
