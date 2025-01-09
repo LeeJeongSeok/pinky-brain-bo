@@ -1,37 +1,42 @@
 package com.jeongseok.pinkybrainbo.common;
 
 
-import com.jeongseok.pinkybrainbo.exception.CustomException;
-import com.jeongseok.pinkybrainbo.exception.ExceptionDto;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.jeongseok.pinkybrainbo.exception.ErrorCode;
+import com.jeongseok.pinkybrainbo.exception.SuccessCode;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.Nullable;
 
-public record ApiResponse<T>(
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class ApiResponse<T> {
 
-	HttpStatus httpStatus,
-	boolean success,
-	@Nullable T data,
-	@Nullable ExceptionDto error,
-	@Nullable PageInfo pageInfo
-) {
+	private final int status;
+	private final boolean success;
+	private final String message;
+	private T data;
+	private PageInfo pageInfo;
 
-	public static <T> ApiResponse<T> ok(@Nullable final T data) {
-		return new ApiResponse<>(HttpStatus.OK, true, data, null, null);
+	public static <T> ApiResponse<T> success(SuccessCode successCode) {
+		return new ApiResponse<>(successCode.getHttpStatus().value(), successCode.isSuccess(),
+			successCode.getMessage(), null, null);
 	}
 
-	public static <T> ApiResponse<T> created(@Nullable final T data) {
-		return new ApiResponse<>(HttpStatus.CREATED, true, data, null, null);
-	}
-
-	public static <T> ApiResponse<T> fail(final CustomException e) {
-		return new ApiResponse<>(e.getErrorCode().getHttpStatus(), false, null, ExceptionDto.of(e.getErrorCode()), null);
+	public static <T> ApiResponse<T> success(SuccessCode successCode, T data) {
+		return new ApiResponse<>(successCode.getHttpStatus().value(), successCode.isSuccess(), successCode.getMessage(),
+			data, null);
 	}
 
 	// 페이징 전용 정적 메서드 추가
-	public static <T> ApiResponse<T> okWithPaging(@Nullable final T data, final Page<?> page) {
+	public static <T> ApiResponse<T> successWithPaging(SuccessCode successCode, T data, Page<?> page) {
 		PageInfo pageInfo = PageInfo.of(page);
-		return new ApiResponse<>(HttpStatus.OK, true, data, null, pageInfo);
+		return new ApiResponse<>(successCode.getHttpStatus().value(), successCode.isSuccess(), successCode.getMessage(), data, pageInfo);
+	}
+
+	public static <T> ApiResponse<T> error(ErrorCode errorCode) {
+		return new ApiResponse<>(errorCode.getHttpStatus().value(), errorCode.isSuccess(),
+			errorCode.getMessage(), null, null);
 	}
 
 	// 페이지 정보를 담는 내부 레코드
