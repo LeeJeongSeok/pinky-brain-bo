@@ -39,8 +39,7 @@ public class ApiResponse<T> {
 	}
 
 	public static <T> ApiResponse<T> error(ErrorCode errorCode) {
-		return new ApiResponse<>(errorCode.getHttpStatus().value(), errorCode.isSuccess(),
-			errorCode.getMessage(), null, null);
+		return new ApiResponse<>(errorCode.getHttpStatus().value(), errorCode.isSuccess(), errorCode.getMessage(), null, null);
 	}
 
 	// 페이지 정보를 담는 내부 레코드
