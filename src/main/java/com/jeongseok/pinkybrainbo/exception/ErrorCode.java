@@ -1,4 +1,4 @@
-package com.jeongseok.pinkybrainbo.common;
+package com.jeongseok.pinkybrainbo.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
