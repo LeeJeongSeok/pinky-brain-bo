@@ -1,9 +1,9 @@
 package com.jeongseok.pinkybrainbo.controller;
 
 import com.jeongseok.pinkybrainbo.common.ApiResponse;
-import com.jeongseok.pinkybrainbo.dto.AddProductRequest;
-import com.jeongseok.pinkybrainbo.dto.ModifyProductRequest;
-import com.jeongseok.pinkybrainbo.dto.ProductResponse;
+import com.jeongseok.pinkybrainbo.dto.request.AddProductRequest;
+import com.jeongseok.pinkybrainbo.dto.request.ModifyProductRequest;
+import com.jeongseok.pinkybrainbo.dto.response.ProductResponse;
 import com.jeongseok.pinkybrainbo.service.ProductService;
 import jakarta.validation.Valid;
 import java.io.IOException;

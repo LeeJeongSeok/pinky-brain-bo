@@ -1,4 +1,4 @@
-package com.jeongseok.pinkybrainbo.product_image.dto.request;
+package com.jeongseok.pinkybrainbo.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

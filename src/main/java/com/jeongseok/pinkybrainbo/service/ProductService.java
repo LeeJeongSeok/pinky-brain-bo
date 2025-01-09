@@ -1,14 +1,14 @@
 package com.jeongseok.pinkybrainbo.service;
 
 import com.jeongseok.pinkybrainbo.domain.Product;
-import com.jeongseok.pinkybrainbo.dto.AddProductRequest;
-import com.jeongseok.pinkybrainbo.dto.ModifyProductRequest;
-import com.jeongseok.pinkybrainbo.dto.ProductResponse;
+import com.jeongseok.pinkybrainbo.dto.request.AddProductRequest;
+import com.jeongseok.pinkybrainbo.dto.request.ModifyProductRequest;
+import com.jeongseok.pinkybrainbo.dto.response.ProductResponse;
 import com.jeongseok.pinkybrainbo.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.dto.ProductMapper;
 import com.jeongseok.pinkybrainbo.common.FileStore;
 import com.jeongseok.pinkybrainbo.domain.ProductImage;
-import com.jeongseok.pinkybrainbo.dto.AddProductImageRequest;
+import com.jeongseok.pinkybrainbo.dto.request.AddProductImageRequest;
 import com.jeongseok.pinkybrainbo.repository.ProductImageRepository;
 import com.jeongseok.pinkybrainbo.dto.ProductImageMapper;
 import jakarta.transaction.Transactional;

@@ -1,8 +1,8 @@
-package com.jeongseok.pinkybrainbo.product_image.util;
+package com.jeongseok.pinkybrainbo.dto;
 
-import com.jeongseok.pinkybrainbo.product_image.domain.ProductImage;
-import com.jeongseok.pinkybrainbo.product_image.dto.request.AddProductImageRequest;
-import com.jeongseok.pinkybrainbo.product_image.dto.response.ProductImageResponse;
+import com.jeongseok.pinkybrainbo.domain.ProductImage;
+import com.jeongseok.pinkybrainbo.dto.request.AddProductImageRequest;
+import com.jeongseok.pinkybrainbo.dto.response.ProductImageResponse;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.jeongseok.pinkybrainbo.product.dto;
+package com.jeongseok.pinkybrainbo.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateProductDto {
+public class AddProductRequest {
 
 	@NotBlank(message = "상품 이름은 필수 입력 값입니다.")
 	private String name;
@@ -25,7 +25,6 @@ public class CreateProductDto {
 
 	private List<MultipartFile> imageFiles;
 
-
 	@Override
 	public String toString() {
 		return "CreateProductDto{" +
@@ -35,4 +34,5 @@ public class CreateProductDto {
 			", imageFiles=" + imageFiles +
 			'}';
 	}
+
 }

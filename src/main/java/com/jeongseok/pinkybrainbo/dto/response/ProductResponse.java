@@ -1,6 +1,5 @@
-package com.jeongseok.pinkybrainbo.product.dto.response;
+package com.jeongseok.pinkybrainbo.dto.response;
 
-import com.jeongseok.pinkybrainbo.product_image.dto.response.ProductImageResponse;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;

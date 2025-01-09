@@ -1,9 +1,8 @@
-package com.jeongseok.pinkybrainbo.product.util;
+package com.jeongseok.pinkybrainbo.dto;
 
-import com.jeongseok.pinkybrainbo.product.domain.Product;
-import com.jeongseok.pinkybrainbo.product.dto.request.AddProductRequest;
-import com.jeongseok.pinkybrainbo.product.dto.response.ProductResponse;
-import com.jeongseok.pinkybrainbo.product_image.util.ProductImageMapper;
+import com.jeongseok.pinkybrainbo.domain.Product;
+import com.jeongseok.pinkybrainbo.dto.request.AddProductRequest;
+import com.jeongseok.pinkybrainbo.dto.response.ProductResponse;
 import java.util.ArrayList;
 
 public class ProductMapper {
