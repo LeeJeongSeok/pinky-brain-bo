@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### application-private 파일을 무시하도록 설정 ###
-/application-private.yml
+src/main/resources/application-private.yml
