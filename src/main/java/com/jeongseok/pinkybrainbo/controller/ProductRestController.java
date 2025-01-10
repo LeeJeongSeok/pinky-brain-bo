@@ -37,14 +37,12 @@ public class ProductRestController {
 	@PostMapping(value = "/products")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public ApiResponse<ProductResponse> createProduct(@Valid @ModelAttribute AddProductRequest addProductRequest) throws IOException {
-
 		return ApiResponse.success(SuccessCode.PRODUCT_CREATE_SUCCESS, productService.createProduct(addProductRequest));
 	}
 
 	@GetMapping(value = "/products")
 	@ResponseStatus(value = HttpStatus.OK)
 	public ApiResponse<List<ProductResponse>> getProducts(@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, @RequestParam("keyword") Optional<String> keyword) {
-
 		// 페이징 처리
 		int currentPage = page.orElse(1);
 		int pageSize = size.orElse(10);
@@ -59,27 +57,20 @@ public class ProductRestController {
 	@GetMapping("/products/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public ApiResponse<ProductResponse> getProduct(@PathVariable("id") long id) {
-
-		ProductResponse productResponse = productService.getProduct(id);
-
-		return ApiResponse.success(SuccessCode.PRODUCT_GET_SUCCESS, productResponse);
+		return ApiResponse.success(SuccessCode.PRODUCT_GET_SUCCESS, productService.getProduct(id));
 	}
 
 	@PatchMapping("/products/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public ApiResponse<ProductResponse> updateProduct(@PathVariable("id") long id, @ModelAttribute ModifyProductRequest modifyProductRequest) throws IOException {
-
-		ProductResponse updateProductDto = productService.updateProduct(id, modifyProductRequest);
-
-		return ApiResponse.success(SuccessCode.PRODUCT_UPDATE_SUCCESS, updateProductDto);
+	public ApiResponse<Void> updateProduct(@PathVariable("id") long id, @ModelAttribute ModifyProductRequest modifyProductRequest) throws IOException {
+		productService.updateProduct(id, modifyProductRequest);
+		return ApiResponse.success(SuccessCode.PRODUCT_UPDATE_SUCCESS);
 	}
 
 	@DeleteMapping("/products/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public ApiResponse<Void> deleteProduct(@PathVariable("id") long id) {
-
 		productService.deleteProduct(id);
-
 		return ApiResponse.success(SuccessCode.PRODUCT_DELETE_SUCCESS);
 	}
 }
