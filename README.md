@@ -18,7 +18,7 @@
 
 ## 기술 스택
 
-- **Frontend**: HTML, CSS, JavaScript (필요시 React.js 또는 Vue.js로 확장 가능)
+- **Frontend**: HTML, CSS, JavaScript, Thymeleaf (필요시 React.js 또는 Vue.js로 확장 가능)
 - **Backend**: Spring Boot
 - **Database**: MySQL
 - **Version Control**: Git, GitHub
