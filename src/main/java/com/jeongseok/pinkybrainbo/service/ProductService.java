@@ -1,9 +1,14 @@
 package com.jeongseok.pinkybrainbo.service;
 
+import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT;
+import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT_IMAGE;
+
 import com.jeongseok.pinkybrainbo.domain.Product;
 import com.jeongseok.pinkybrainbo.dto.request.AddProductRequest;
 import com.jeongseok.pinkybrainbo.dto.request.ModifyProductRequest;
 import com.jeongseok.pinkybrainbo.dto.response.ProductResponse;
+import com.jeongseok.pinkybrainbo.exception.ErrorCode;
+import com.jeongseok.pinkybrainbo.exception.model.NotFoundException;
 import com.jeongseok.pinkybrainbo.repository.ProductRepository;
 import com.jeongseok.pinkybrainbo.dto.ProductMapper;
 import com.jeongseok.pinkybrainbo.common.FileStore;
@@ -32,9 +37,7 @@ public class ProductService {
 	private final ProductImageRepository productImageRepository;
 	private final FileStore fileStore;
 
-	// TODO: Response Entity에 맞춰서 값을 리턴할 수 있도록 고려해야함
 	public ProductResponse createProduct(AddProductRequest addProductRequest) throws IOException {
-
 		// ProductImage S3 업로드
 		List<AddProductImageRequest> productImageDtos = fileStore.storeFiles(addProductRequest.getImageFiles());
 		// ProductImageDto -> ProductImage 변환
@@ -47,15 +50,11 @@ public class ProductService {
 			productImage.addProduct(product);
 		}
 
-		Product savedProduct = productRepository.save(product);
-
-		return ProductMapper.toResponse(savedProduct);
-
+		return ProductMapper.toResponse(productRepository.save(product));
 	}
 
 
 	public Page<ProductResponse> getPaginatedProducts(Pageable pageable, String searchKeyword) {
-
 		// 페이지네이션 기본 정보 설정
 		int pageSize = pageable.getPageSize(); // 한 페이지당 항목 수
 		int currentPage = pageable.getPageNumber(); // 현재 페이지 번호 (0부터 시작)
@@ -77,29 +76,26 @@ public class ProductService {
 			int toIndex = Math.min(startItem + pageSize, products.size());
 			productPages = products.subList(startItem, toIndex);
 		}
-
 		// 페이지네이션 결과를 PageImpl 객체로 반환
 		return new PageImpl<>(productPages, PageRequest.of(currentPage, pageSize), products.size());
 	}
 
 	public ProductResponse getProduct(long id) {
-
 		Product product = productRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없쪄요"));
+			.orElseThrow(() -> new NotFoundException(NOT_FOUND_PRODUCT));
 
 		return ProductMapper.toResponse(product);
 	}
 
 	@Transactional
-	public ProductResponse updateProduct(long id, ModifyProductRequest modifyProductRequest) throws IOException {
-
+	public void updateProduct(long id, ModifyProductRequest modifyProductRequest) throws IOException {
 		// 기존 상품 이미지 조회
 		List<ProductImage> existingImages = productImageRepository.findByProduct_Id(id)
-			.orElseThrow(() -> new IllegalArgumentException("상품 이미지 데이터가 없습니다."));
+			.orElseThrow(() -> new NotFoundException(NOT_FOUND_PRODUCT_IMAGE));
 
 		// 기존 상품 조회
 		Product savedProduct = productRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없습니다."));
+			.orElseThrow(() -> new NotFoundException(NOT_FOUND_PRODUCT));
 
 		// 삭제할 이미지
 		List<Long> imagesToDeleteId = modifyProductRequest.getImagesToDelete();
@@ -180,16 +176,12 @@ public class ProductService {
 
 		// 상품 정보 업데이트
 		savedProduct.updateProduct(modifyProductRequest);
-
-		return null;
 	}
 
 	@Transactional
 	public void deleteProduct(long id) {
-
-		// 기존 상품 조회
 		Product savedProduct = productRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("상품 데이터가 없습니다."));
+			.orElseThrow(() -> new NotFoundException(NOT_FOUND_PRODUCT));
 
 		productRepository.delete(savedProduct);
 	}
