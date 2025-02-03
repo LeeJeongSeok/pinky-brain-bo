@@ -23,6 +23,8 @@ public class ProductMapper {
 			.category(product.getCategory())
 			.description(product.getDescription())
 			.imageFiles(ProductImageMapper.toResponse(product.getProductImages()))
+			.createdAt(product.getCreatedAt())
+			.updatedAt(product.getUpdatedAt())
 			.build();
 	}
 }

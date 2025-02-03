@@ -3,25 +3,25 @@ package com.jeongseok.pinkybrainbo.service;
 import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT;
 import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT_IMAGE;
 
+import com.jeongseok.pinkybrainbo.common.FileStore;
 import com.jeongseok.pinkybrainbo.domain.Product;
+import com.jeongseok.pinkybrainbo.domain.ProductImage;
+import com.jeongseok.pinkybrainbo.dto.ProductImageMapper;
+import com.jeongseok.pinkybrainbo.dto.ProductMapper;
+import com.jeongseok.pinkybrainbo.dto.request.AddProductImageRequest;
 import com.jeongseok.pinkybrainbo.dto.request.AddProductRequest;
 import com.jeongseok.pinkybrainbo.dto.request.ModifyProductRequest;
 import com.jeongseok.pinkybrainbo.dto.response.ProductResponse;
-import com.jeongseok.pinkybrainbo.exception.ErrorCode;
 import com.jeongseok.pinkybrainbo.exception.model.NotFoundException;
-import com.jeongseok.pinkybrainbo.repository.ProductRepository;
-import com.jeongseok.pinkybrainbo.dto.ProductMapper;
-import com.jeongseok.pinkybrainbo.common.FileStore;
-import com.jeongseok.pinkybrainbo.domain.ProductImage;
-import com.jeongseok.pinkybrainbo.dto.request.AddProductImageRequest;
 import com.jeongseok.pinkybrainbo.repository.ProductImageRepository;
-import com.jeongseok.pinkybrainbo.dto.ProductImageMapper;
+import com.jeongseok.pinkybrainbo.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductService {
