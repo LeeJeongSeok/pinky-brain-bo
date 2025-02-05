@@ -15,7 +15,6 @@ import com.jeongseok.pinkybrainbo.dto.response.ProductResponse;
 import com.jeongseok.pinkybrainbo.exception.model.NotFoundException;
 import com.jeongseok.pinkybrainbo.repository.ProductImageRepository;
 import com.jeongseok.pinkybrainbo.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +26,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -54,7 +54,7 @@ public class ProductService {
 		return ProductMapper.toResponse(productRepository.save(product));
 	}
 
-
+	@Transactional(readOnly = true)
 	public Page<ProductResponse> getPaginatedProducts(Pageable pageable, String searchKeyword) {
 		// 페이지네이션 기본 정보 설정
 		int pageSize = pageable.getPageSize(); // 한 페이지당 항목 수
@@ -81,6 +81,7 @@ public class ProductService {
 		return new PageImpl<>(productPages, PageRequest.of(currentPage, pageSize), products.size());
 	}
 
+	@Transactional(readOnly = true)
 	public ProductResponse getProduct(long id) {
 		Product product = productRepository.findById(id)
 			.orElseThrow(() -> new NotFoundException(NOT_FOUND_PRODUCT));
