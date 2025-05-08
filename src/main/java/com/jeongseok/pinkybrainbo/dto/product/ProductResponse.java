@@ -1,5 +1,6 @@
-package com.jeongseok.pinkybrainbo.dto.response;
+package com.jeongseok.pinkybrainbo.dto.product;
 
+import com.jeongseok.pinkybrainbo.dto.productimage.ProductImageResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
