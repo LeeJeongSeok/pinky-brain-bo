@@ -1,17 +1,17 @@
 package com.jeongseok.pinkybrainbo.dto;
 
 import com.jeongseok.pinkybrainbo.domain.Product;
-import com.jeongseok.pinkybrainbo.dto.request.AddProductRequest;
-import com.jeongseok.pinkybrainbo.dto.response.ProductResponse;
+import com.jeongseok.pinkybrainbo.dto.product.ProductCreateDto;
+import com.jeongseok.pinkybrainbo.dto.product.ProductResponse;
 import java.util.ArrayList;
 
 public class ProductMapper {
 
-	public static Product toDomain(AddProductRequest addProductRequest) {
+	public static Product toDomain(ProductCreateDto productCreateDto) {
 		return Product.builder()
-			.name(addProductRequest.getName())
-			.category(addProductRequest.getCategory())
-			.description(addProductRequest.getDescription())
+			.name(productCreateDto.getName())
+			.category(productCreateDto.getCategory())
+			.description(productCreateDto.getDescription())
 			.productImages(new ArrayList<>())
 			.build();
 	}
