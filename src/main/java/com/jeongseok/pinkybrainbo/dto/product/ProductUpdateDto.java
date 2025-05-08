@@ -1,4 +1,4 @@
-package com.jeongseok.pinkybrainbo.dto.request;
+package com.jeongseok.pinkybrainbo.dto.product;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ModifyProductRequest {
+public class ProductUpdateDto {
 
 	private String name;
 	private String category;
