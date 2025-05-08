@@ -3,15 +3,15 @@ package com.jeongseok.pinkybrainbo.service;
 import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT;
 import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT_IMAGE;
 
-import com.jeongseok.pinkybrainbo.common.FileStore;
+import com.jeongseok.pinkybrainbo.common.S3FileUploader;
 import com.jeongseok.pinkybrainbo.domain.Product;
 import com.jeongseok.pinkybrainbo.domain.ProductImage;
 import com.jeongseok.pinkybrainbo.dto.ProductImageMapper;
 import com.jeongseok.pinkybrainbo.dto.ProductMapper;
-import com.jeongseok.pinkybrainbo.dto.request.AddProductImageRequest;
-import com.jeongseok.pinkybrainbo.dto.request.AddProductRequest;
-import com.jeongseok.pinkybrainbo.dto.request.ModifyProductRequest;
-import com.jeongseok.pinkybrainbo.dto.response.ProductResponse;
+import com.jeongseok.pinkybrainbo.dto.productimage.ProductImageCreateDto;
+import com.jeongseok.pinkybrainbo.dto.product.ProductCreateDto;
+import com.jeongseok.pinkybrainbo.dto.product.ProductUpdateDto;
+import com.jeongseok.pinkybrainbo.dto.product.ProductResponse;
 import com.jeongseok.pinkybrainbo.exception.model.NotFoundException;
 import com.jeongseok.pinkybrainbo.repository.ProductImageRepository;
 import com.jeongseok.pinkybrainbo.repository.ProductRepository;
@@ -36,15 +36,15 @@ public class ProductService {
 
 	private final ProductRepository productRepository;
 	private final ProductImageRepository productImageRepository;
-	private final FileStore fileStore;
+	private final S3FileUploader s3FileUploader;
 
-	public ProductResponse createProduct(AddProductRequest addProductRequest) throws IOException {
+	public ProductResponse createProduct(ProductCreateDto productCreateDto) throws IOException {
 		// ProductImage S3 업로드
-		List<AddProductImageRequest> productImageDtos = fileStore.storeFiles(addProductRequest.getImageFiles());
+		List<ProductImageCreateDto> productImageDtos = s3FileUploader.storeFiles(productCreateDto.getImageFiles());
 		// ProductImageDto -> ProductImage 변환
 		List<ProductImage> productImages = ProductImageMapper.toDomain(productImageDtos);
 		// Product 생성
-		Product product = ProductMapper.toDomain(addProductRequest);
+		Product product = ProductMapper.toDomain(productCreateDto);
 
 		// ProductImage 테이블에 Product ID(fk) 값 지정
 		for (ProductImage productImage : productImages) {
@@ -90,7 +90,7 @@ public class ProductService {
 	}
 
 	@Transactional
-	public void updateProduct(long id, ModifyProductRequest modifyProductRequest) throws IOException {
+	public void updateProduct(long id, ProductUpdateDto productUpdateDto) throws IOException {
 		// 기존 상품 이미지 조회
 		List<ProductImage> existingImages = productImageRepository.findByProduct_Id(id)
 			.orElseThrow(() -> new NotFoundException(NOT_FOUND_PRODUCT_IMAGE));
@@ -100,8 +100,8 @@ public class ProductService {
 			.orElseThrow(() -> new NotFoundException(NOT_FOUND_PRODUCT));
 
 		// 삭제할 이미지
-		List<Long> imagesToDeleteId = modifyProductRequest.getImagesToDelete();
-		List<MultipartFile> newImages = modifyProductRequest.getNewImages();
+		List<Long> imagesToDeleteId = productUpdateDto.getImagesToDelete();
+		List<MultipartFile> newImages = productUpdateDto.getNewImages();
 
 		// 이미지 파일을 삭제하는 경우
 		if (imagesToDeleteId != null && newImages == null) {
@@ -127,7 +127,8 @@ public class ProductService {
 				.orElse(0);
 
 			// 새로운 이미지 파일 저장
-			List<AddProductImageRequest> updateProductImageDtos = fileStore.storeFiles(modifyProductRequest.getNewImages());
+			List<ProductImageCreateDto> updateProductImageDtos = s3FileUploader.storeFiles(
+				productUpdateDto.getNewImages());
 			List<ProductImage> saveNewImages = ProductImageMapper.toDomain(updateProductImageDtos, maxOrder);
 
 			// product_id cannot be null
@@ -166,7 +167,8 @@ public class ProductService {
 				.orElse(0); // 살아남은 이미지가 없을 경우 기본값 0
 
 			// 새로운 이미지 파일 저장
-			List<AddProductImageRequest> updateProductImageDtos = fileStore.storeFiles(modifyProductRequest.getNewImages());
+			List<ProductImageCreateDto> updateProductImageDtos = s3FileUploader.storeFiles(
+				productUpdateDto.getNewImages());
 			List<ProductImage> saveNewImages = ProductImageMapper.toDomain(updateProductImageDtos, maxOrder);
 
 			// product_id cannot be null
@@ -177,7 +179,7 @@ public class ProductService {
 		}
 
 		// 상품 정보 업데이트
-		savedProduct.updateProduct(modifyProductRequest);
+		savedProduct.updateProduct(productUpdateDto);
 	}
 
 	@Transactional
