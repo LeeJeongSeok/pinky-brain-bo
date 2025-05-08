@@ -1,19 +1,19 @@
 package com.jeongseok.pinkybrainbo.dto;
 
 import com.jeongseok.pinkybrainbo.domain.ProductImage;
-import com.jeongseok.pinkybrainbo.dto.request.AddProductImageRequest;
-import com.jeongseok.pinkybrainbo.dto.response.ProductImageResponse;
+import com.jeongseok.pinkybrainbo.dto.productimage.ProductImageCreateDto;
+import com.jeongseok.pinkybrainbo.dto.productimage.ProductImageResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductImageMapper {
 
 	// 생성
-	public static List<ProductImage> toDomain(List<AddProductImageRequest> productImageDtos) {
+	public static List<ProductImage> toDomain(List<ProductImageCreateDto> productImageDtos) {
 		List<ProductImage> productImages = new ArrayList<>();
 		int order = 1; // 상품별로 순서를 초기화
 
-		for (AddProductImageRequest productImageDto : productImageDtos) {
+		for (ProductImageCreateDto productImageDto : productImageDtos) {
 			productImages.add(toDomain(productImageDto, order++));
 		}
 
@@ -21,10 +21,10 @@ public class ProductImageMapper {
 	}
 
 	// 수정
-	public static List<ProductImage> toDomain(List<AddProductImageRequest> productImageDtos, int order) {
+	public static List<ProductImage> toDomain(List<ProductImageCreateDto> productImageDtos, int order) {
 		List<ProductImage> productImages = new ArrayList<>();
 
-		for (AddProductImageRequest productImageDto : productImageDtos) {
+		for (ProductImageCreateDto productImageDto : productImageDtos) {
 			productImages.add(toDomain(productImageDto, ++order));
 		}
 
@@ -41,9 +41,9 @@ public class ProductImageMapper {
 		return productImageDtos;
 	}
 
-	private static ProductImage toDomain(AddProductImageRequest addProductImageRequest, int order) {
+	private static ProductImage toDomain(ProductImageCreateDto productImageCreateDto, int order) {
 		return ProductImage.builder()
-			.imageUrl(addProductImageRequest.getStoreFileName())
+			.imageUrl(productImageCreateDto.getStoreFileName())
 			.imageOrder(order)
 			.build();
 	}
