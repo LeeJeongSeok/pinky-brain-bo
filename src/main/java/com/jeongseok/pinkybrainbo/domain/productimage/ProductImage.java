@@ -1,5 +1,7 @@
-package com.jeongseok.pinkybrainbo.domain;
+package com.jeongseok.pinkybrainbo.domain.productimage;
 
+import com.jeongseok.pinkybrainbo.domain.BaseEntity;
+import com.jeongseok.pinkybrainbo.domain.product.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
