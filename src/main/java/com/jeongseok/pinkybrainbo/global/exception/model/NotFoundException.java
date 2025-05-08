@@ -1,7 +1,7 @@
-package com.jeongseok.pinkybrainbo.exception.model;
+package com.jeongseok.pinkybrainbo.global.exception.model;
 
 
-import com.jeongseok.pinkybrainbo.exception.ErrorCode;
+import com.jeongseok.pinkybrainbo.global.exception.ErrorCode;
 
 public class NotFoundException extends RuntimeException {
 

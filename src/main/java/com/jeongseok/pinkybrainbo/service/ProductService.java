@@ -1,7 +1,7 @@
 package com.jeongseok.pinkybrainbo.service;
 
-import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT;
-import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT_IMAGE;
+import static com.jeongseok.pinkybrainbo.global.exception.ErrorCode.NOT_FOUND_PRODUCT;
+import static com.jeongseok.pinkybrainbo.global.exception.ErrorCode.NOT_FOUND_PRODUCT_IMAGE;
 
 import com.jeongseok.pinkybrainbo.domain.product.Product;
 import com.jeongseok.pinkybrainbo.domain.productimage.ProductImage;
@@ -11,7 +11,7 @@ import com.jeongseok.pinkybrainbo.dto.productimage.ProductImageCreateDto;
 import com.jeongseok.pinkybrainbo.dto.product.ProductCreateDto;
 import com.jeongseok.pinkybrainbo.dto.product.ProductUpdateDto;
 import com.jeongseok.pinkybrainbo.dto.product.ProductResponse;
-import com.jeongseok.pinkybrainbo.exception.model.NotFoundException;
+import com.jeongseok.pinkybrainbo.global.exception.model.NotFoundException;
 import com.jeongseok.pinkybrainbo.repository.ProductImageRepository;
 import com.jeongseok.pinkybrainbo.repository.ProductRepository;
 import java.io.IOException;

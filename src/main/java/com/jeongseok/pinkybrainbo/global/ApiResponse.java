@@ -2,8 +2,8 @@ package com.jeongseok.pinkybrainbo.global;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.jeongseok.pinkybrainbo.exception.ErrorCode;
-import com.jeongseok.pinkybrainbo.exception.SuccessCode;
+import com.jeongseok.pinkybrainbo.global.exception.ErrorCode;
+import com.jeongseok.pinkybrainbo.global.exception.SuccessCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -4,7 +4,7 @@ import com.jeongseok.pinkybrainbo.global.ApiResponse;
 import com.jeongseok.pinkybrainbo.dto.product.ProductCreateDto;
 import com.jeongseok.pinkybrainbo.dto.product.ProductUpdateDto;
 import com.jeongseok.pinkybrainbo.dto.product.ProductResponse;
-import com.jeongseok.pinkybrainbo.exception.SuccessCode;
+import com.jeongseok.pinkybrainbo.global.exception.SuccessCode;
 import com.jeongseok.pinkybrainbo.service.ProductService;
 import jakarta.validation.Valid;
 import java.io.IOException;
