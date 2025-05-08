@@ -1,6 +1,6 @@
 package com.jeongseok.pinkybrainbo.controller;
 
-import com.jeongseok.pinkybrainbo.common.ApiResponse;
+import com.jeongseok.pinkybrainbo.global.ApiResponse;
 import com.jeongseok.pinkybrainbo.dto.product.ProductCreateDto;
 import com.jeongseok.pinkybrainbo.dto.product.ProductUpdateDto;
 import com.jeongseok.pinkybrainbo.dto.product.ProductResponse;

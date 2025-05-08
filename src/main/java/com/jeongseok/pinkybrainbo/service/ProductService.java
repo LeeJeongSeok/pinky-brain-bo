@@ -3,7 +3,6 @@ package com.jeongseok.pinkybrainbo.service;
 import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT;
 import static com.jeongseok.pinkybrainbo.exception.ErrorCode.NOT_FOUND_PRODUCT_IMAGE;
 
-import com.jeongseok.pinkybrainbo.common.S3FileUploader;
 import com.jeongseok.pinkybrainbo.domain.product.Product;
 import com.jeongseok.pinkybrainbo.domain.productimage.ProductImage;
 import com.jeongseok.pinkybrainbo.dto.ProductImageMapper;

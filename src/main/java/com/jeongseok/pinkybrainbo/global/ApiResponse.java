@@ -1,4 +1,4 @@
-package com.jeongseok.pinkybrainbo.common;
+package com.jeongseok.pinkybrainbo.global;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
