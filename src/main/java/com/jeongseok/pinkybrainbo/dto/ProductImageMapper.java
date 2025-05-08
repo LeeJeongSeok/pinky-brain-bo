@@ -1,6 +1,6 @@
 package com.jeongseok.pinkybrainbo.dto;
 
-import com.jeongseok.pinkybrainbo.domain.ProductImage;
+import com.jeongseok.pinkybrainbo.domain.productimage.ProductImage;
 import com.jeongseok.pinkybrainbo.dto.productimage.ProductImageCreateDto;
 import com.jeongseok.pinkybrainbo.dto.productimage.ProductImageResponse;
 import java.util.ArrayList;
