@@ -1,4 +1,4 @@
-package com.jeongseok.pinkybrainbo.common;
+package com.jeongseok.pinkybrainbo.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

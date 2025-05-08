@@ -1,6 +1,5 @@
 package com.jeongseok.pinkybrainbo.domain;
 
-import com.jeongseok.pinkybrainbo.common.BaseEntity;
 import com.jeongseok.pinkybrainbo.dto.product.ProductUpdateDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
