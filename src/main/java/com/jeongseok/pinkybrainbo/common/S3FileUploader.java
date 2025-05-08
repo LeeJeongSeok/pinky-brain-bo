@@ -2,7 +2,7 @@ package com.jeongseok.pinkybrainbo.common;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.jeongseok.pinkybrainbo.dto.request.AddProductImageRequest;
+import com.jeongseok.pinkybrainbo.dto.productimage.ProductImageCreateDto;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @RequiredArgsConstructor
-public class FileStore {
+public class S3FileUploader {
 
 	private final S3Config s3Config;
 
@@ -29,8 +29,8 @@ public class FileStore {
 		return fileDir + filename;
 	}
 
-	public List<AddProductImageRequest> storeFiles(List<MultipartFile> files) throws IOException {
-		List<AddProductImageRequest> storeFileResult = new ArrayList<>();
+	public List<ProductImageCreateDto> storeFiles(List<MultipartFile> files) throws IOException {
+		List<ProductImageCreateDto> storeFileResult = new ArrayList<>();
 		for (MultipartFile file : files) {
 			if (!file.isEmpty()) {
 				storeFileResult.add(storeFile(file));
@@ -39,7 +39,7 @@ public class FileStore {
 		return storeFileResult;
 	}
 
-	public AddProductImageRequest storeFile(MultipartFile file) throws IOException {
+	public ProductImageCreateDto storeFile(MultipartFile file) throws IOException {
 
 		if (file.isEmpty()) {
 			return null;
@@ -55,7 +55,7 @@ public class FileStore {
 		// S3에 파일 업로드
 		String s3UploadFileName = putS3(storeFileName, localFile);
 
-		return new AddProductImageRequest(originalFilename, s3UploadFileName);
+		return new ProductImageCreateDto(originalFilename, s3UploadFileName);
 
 	}
 
