@@ -1,4 +1,4 @@
-package com.jeongseok.pinkybrainbo.dto.request;
+package com.jeongseok.pinkybrainbo.dto.productimage;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddProductImageRequest {
+public class ProductImageCreateDto {
 
 	private String uploadFileName;
 	private String storeFileName;
